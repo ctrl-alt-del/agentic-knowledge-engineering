@@ -1,0 +1,203 @@
+{
+  "skill_name": "project-initializer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "newbie-template",
+      "prompt": "我想建一个知识工程平台项目，但是不太懂这些配置选项，里面的技术名词我也不太清楚，你帮我推荐一个方案吧",
+      "expected_output": "LLM 用中文友好对话，解释各能力模块含义，主动推荐模板，收集基础信息（名称和描述），最终输出合法的 JSON 配置。即使用户不懂术语，也能顺利完成配置。",
+      "files": [],
+      "assertions": [
+        {
+          "id": "valid_output_json",
+          "description": "输出包含合法的 JSON 配置，可通过 jsonschema 验证",
+          "type": "script"
+        },
+        {
+          "id": "project_name_length",
+          "description": "project_name 长度在 1-20 字符之间",
+          "type": "script"
+        },
+        {
+          "id": "description_length",
+          "description": "description 长度在 1-50 字符之间",
+          "type": "script"
+        },
+        {
+          "id": "all_required_fields",
+          "description": "所有必填字段存在且非 null",
+          "type": "script"
+        },
+        {
+          "id": "template_enum_valid",
+          "description": "template 值为 template-1,template-2,template-3 之一",
+          "type": "script"
+        },
+        {
+          "id": "custom_at_least_one",
+          "description": "custom 中至少一项能力被启用",
+          "type": "script"
+        },
+        {
+          "id": "no_hardcoded_urls",
+          "description": "输出中不含硬编码的 MCP/API 端点 URL",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "expert-custom",
+      "prompt": "我要创建项目叫 my-knowledge-app，描述是「代码仓库知识管理」。只要代码逆向知识和胶囊知识，单仓模式，代码从 https://github.com/my-org/main-service 拉，main 分支，胶囊知识用本地上传方式",
+      "expected_output": "LLM 识别用户是专家，无需逐个解释术语。快速确认配置后直接输出 JSON。不应反问用户「你想选哪个模板」或逐项解释每个能力。",
+      "files": [],
+      "assertions": [
+        {
+          "id": "valid_output_json",
+          "description": "输出包含合法的 JSON 配置",
+          "type": "script"
+        },
+        {
+          "id": "project_name_length",
+          "description": "project_name 为 my-knowledge-app，长度合法",
+          "type": "script"
+        },
+        {
+          "id": "description_length",
+          "description": "description 为「代码仓库知识管理」，长度合法",
+          "type": "script"
+        },
+        {
+          "id": "all_required_fields",
+          "description": "所有必填字段存在",
+          "type": "script"
+        },
+        {
+          "id": "repo_mode_enum",
+          "description": "code_reverse_knowledge mode 为 single",
+          "type": "script"
+        },
+        {
+          "id": "repo_url_format",
+          "description": "仓库 URL 为 https://github.com/my-org/main-service",
+          "type": "script"
+        },
+        {
+          "id": "capsule_local_upload",
+          "description": "胶囊知识 local_upload 为 true",
+          "type": "script"
+        },
+        {
+          "id": "custom_exact_two",
+          "description": "仅 code_reverse_knowledge 和 capsule_knowledge 启用",
+          "type": "script"
+        },
+        {
+          "id": "no_hardcoded_urls",
+          "description": "输出中不含硬编码的 MCP/API 端点 URL",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "full-ecosystem",
+      "prompt": "初始化一个完整的生态型项目，名称「全域知识图谱平台」，描述「连接全公司各业务线知识资产构建统一知识网络」。所有能力都要开启，文档从 GitHub 拉取 my-org/docs 和 my-org/specs 两个仓库，都取 main 分支，代码也是这两个仓库，胶囊知识同时要日志提取接口和本地上传",
+      "expected_output": "LLM 选择模板1（生态型），收集多仓库子配置，最终输出一个开启所有能力的完整 JSON。",
+      "files": [],
+      "assertions": [
+        {
+          "id": "valid_output_json",
+          "description": "输出包含合法的 JSON 配置",
+          "type": "script"
+        },
+        {
+          "id": "project_name_length",
+          "description": "project_name 为「全域知识图谱平台」，长度合法",
+          "type": "script"
+        },
+        {
+          "id": "description_length",
+          "description": "描述长度合法",
+          "type": "script"
+        },
+        {
+          "id": "all_required_fields",
+          "description": "所有必填字段存在",
+          "type": "script"
+        },
+        {
+          "id": "template_is_1",
+          "description": "template 为 template-1（生态型）",
+          "type": "script"
+        },
+        {
+          "id": "all_capabilities_enabled",
+          "description": "四个能力全部启用",
+          "type": "script"
+        },
+        {
+          "id": "multi_repo_docs",
+          "description": "document_forward_knowledge 包含 2 个 GitHub 仓库",
+          "type": "script"
+        },
+        {
+          "id": "multi_repo_code",
+          "description": "code_reverse_knowledge 包含 2 个仓库",
+          "type": "script"
+        },
+        {
+          "id": "capsule_both",
+          "description": "胶囊知识同时开启了 log_extraction_api 和 local_upload",
+          "type": "script"
+        },
+        {
+          "id": "no_hardcoded_urls",
+          "description": "输出中不含硬编码的 MCP/API 端点 URL",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "resume-partial",
+      "prompt": "（模拟：假设 state.json 已存在，phase 为 capabilities，project_name 已填为「临时项目」，description 已填为「测试」。继续执行。）你之前帮我初始化到一半的项目，我继续配置。我选模板2，文档正向知识从 GitHub 的 my-org/wiki 仓库拉，其他不用管",
+      "expected_output": "LLM 检测到 state.json 存在，询问是否继续。从阶段 3（能力选择）继续，直接应用模板2，收集文档子配置，跳过代码和胶囊的子配置（模板2已包含但不在此次收集范围内）。",
+      "files": [
+        "evals/state.json"
+      ],
+      "assertions": [
+        {
+          "id": "valid_output_json",
+          "description": "输出包含合法的 JSON 配置",
+          "type": "script"
+        },
+        {
+          "id": "project_name_preserved",
+          "description": "project_name 为「临时项目」，保留了之前填写的值",
+          "type": "script"
+        },
+        {
+          "id": "description_preserved",
+          "description": "description 为「测试」，保留了之前填写的值",
+          "type": "script"
+        },
+        {
+          "id": "template_is_2",
+          "description": "template 为 template-2",
+          "type": "script"
+        },
+        {
+          "id": "all_required_fields",
+          "description": "所有必填字段存在",
+          "type": "script"
+        },
+        {
+          "id": "no_hardcoded_urls",
+          "description": "输出中不含硬编码的 MCP/API 端点 URL",
+          "type": "script"
+        }
+      ]
+    }
+  ]
+}
