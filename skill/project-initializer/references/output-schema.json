@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "project_name",
+    "description",
+    "custom",
+    "template",
+    "document_forward_knowledge",
+    "code_reverse_knowledge",
+    "capsule_knowledge"
+  ],
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20,
+      "pattern": "^[\\u4e00-\\u9fa5a-zA-Z0-9_-]+$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "custom": {
+      "type": "object",
+      "required": [
+        "document_forward_knowledge",
+        "code_reverse_knowledge",
+        "capsule_knowledge",
+        "cross_domain_knowledge_graph"
+      ],
+      "properties": {
+        "document_forward_knowledge": {
+          "type": "object",
+          "required": ["enabled", "multi_source_md_conversion", "multimodal_image_parsing"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "multi_source_md_conversion": { "type": "boolean" },
+            "multimodal_image_parsing": { "type": "boolean" }
+          }
+        },
+        "code_reverse_knowledge": {
+          "type": "object",
+          "required": ["enabled", "mode", "repositories"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "mode": { "type": "string", "enum": ["single", "multi"] },
+            "repositories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["url", "branch_or_tag", "branch_path"],
+                "properties": {
+                  "url": { "type": "string", "pattern": "^https://github\\.com/[\\w.-]+/[\\w.-]+$" },
+                  "branch_or_tag": { "type": "string", "minLength": 1 },
+                  "branch_path": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "capsule_knowledge": {
+          "type": "object",
+          "required": ["enabled", "log_extraction_api", "local_upload"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "log_extraction_api": { "type": ["string", "null"] },
+            "local_upload": { "type": "boolean" }
+          }
+        },
+        "cross_domain_knowledge_graph": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "template": {
+      "type": "string",
+      "enum": ["template-1", "template-2", "template-3"]
+    },
+    "document_forward_knowledge": {
+      "type": "object",
+      "required": ["github", "local_upload"],
+      "properties": {
+        "github": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["url", "branch_or_tag", "branch_path"],
+            "properties": {
+              "url": { "type": "string", "pattern": "^https://github\\.com/[\\w.-]+/[\\w.-]+$" },
+              "branch_or_tag": { "type": "string", "minLength": 1 },
+              "branch_path": { "type": "string" }
+            }
+          }
+        },
+        "local_upload": { "type": "boolean" }
+      }
+    },
+    "code_reverse_knowledge": {
+      "type": "object"
+    },
+    "capsule_knowledge": {
+      "type": "object"
+    }
+  }
+}

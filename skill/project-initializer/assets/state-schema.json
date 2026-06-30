@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["phase"],
+  "properties": {
+    "phase": {
+      "type": "string",
+      "enum": ["basics", "capabilities", "template", "subconfig", "done"],
+      "description": "当前所处的对话阶段"
+    },
+    "project_name": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "custom": {
+      "$ref": "#/definitions/custom"
+    },
+    "template": {
+      "type": "string",
+      "enum": ["template-1", "template-2", "template-3"]
+    },
+    "document_forward_knowledge": {
+      "$ref": "#/definitions/document_forward_knowledge"
+    },
+    "code_reverse_knowledge": {
+      "$ref": "#/definitions/code_reverse_knowledge"
+    },
+    "capsule_knowledge": {
+      "$ref": "#/definitions/capsule_knowledge"
+    },
+    "cross_domain_knowledge_graph": {
+      "$ref": "#/definitions/cross_domain_knowledge_graph"
+    }
+  },
+  "definitions": {
+    "custom": {
+      "type": "object",
+      "properties": {
+        "document_forward_knowledge": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "multi_source_md_conversion": { "type": "boolean" },
+            "multimodal_image_parsing": { "type": "boolean" }
+          }
+        },
+        "code_reverse_knowledge": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "mode": { "type": "string", "enum": ["single", "multi"] },
+            "repositories": { "type": "array" }
+          }
+        },
+        "capsule_knowledge": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "log_extraction_api": { "type": ["string", "null"] },
+            "local_upload": { "type": "boolean" }
+          }
+        },
+        "cross_domain_knowledge_graph": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "document_forward_knowledge": {
+      "type": "object",
+      "properties": {
+        "github": { "type": "array" },
+        "local_upload": { "type": "boolean" }
+      }
+    },
+    "code_reverse_knowledge": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["single", "multi"] },
+        "repositories": { "type": "array" }
+      }
+    },
+    "capsule_knowledge": {
+      "type": "object",
+      "properties": {
+        "log_extraction_api": { "type": ["string", "null"] },
+        "local_upload": { "type": "boolean" }
+      }
+    },
+    "cross_domain_knowledge_graph": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    }
+  }
+}
