@@ -1,7 +1,7 @@
 ---
 feature_id: "001"
 name: "Chat UI"
-status: "🚧 In Progress"
+status: "✅ Done"
 depends_on: []
 touches:
   - "ui/package.json"

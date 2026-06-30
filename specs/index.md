@@ -6,6 +6,6 @@ last_updated: "2026-06-30"
 
 | ID | Feature | Status | Touches | Depends On |
 |----|---------|--------|---------|------------|
-| — | _(none yet)_ | — | — | — |
+| 001 | Chat UI | ✅ Done | `ui/src/**`, `README.md` | — |
 
 Status: 📋 Planned → 🚧 In Progress → ✅ Done → 📦 Archived
