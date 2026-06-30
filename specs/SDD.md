@@ -78,8 +78,5 @@ Feature Request Received
 
 ## Build & Test Commands
 
-- Build: `{project_build_cmd}`
-- Test: `{project_test_cmd}`
-
-> **TODO**: Replace `{project_build_cmd}` and `{project_test_cmd}` with actual
-> commands once the tech stack is chosen.
+- Build: `npm run dev`
+- Test: `npm test`

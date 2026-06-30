@@ -1,7 +1,9 @@
 # Agentic Knowledge Engineering
 
 Open-code skill and UI project for building and orchestrating Claude skills.
-Tech stack TBD.
+
+- **UI**: Vue 3 + TypeScript + Tailwind CSS (Vite)
+- **Testing**: Vitest + @vue/test-utils
 
 ## Project Conventions
 
