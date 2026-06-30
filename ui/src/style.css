@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-bg: #f8f5f0;
+  --color-warm-user: #d4b896;
+  --color-cool-assistant: #e8ecf0;
+  --color-dark-text: #3d3929;
+  --color-cool-text: #2a3040;
+  --color-send: #3d3929;
+  --color-muted: #9b9682;
+}
+
+body {
+  margin: 0;
+  background: var(--color-warm-bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
