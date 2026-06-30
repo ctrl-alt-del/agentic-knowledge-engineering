@@ -6,22 +6,26 @@ depends_on: []
 touches:
   - "ui/package.json"
   - "ui/vite.config.ts"
+  - "ui/vitest.config.ts"
   - "ui/tsconfig.json"
   - "ui/tsconfig.app.json"
   - "ui/tsconfig.node.json"
-  - "ui/tailwind.config.js"
-  - "ui/postcss.config.js"
   - "ui/index.html"
   - "ui/src/main.ts"
   - "ui/src/style.css"
-  - "ui/src/vite-env.d.ts"
   - "ui/src/App.vue"
   - "ui/src/components/ChatContainer.vue"
+  - "ui/src/components/ChatContainer.test.ts"
   - "ui/src/components/MessageList.vue"
+  - "ui/src/components/MessageList.test.ts"
   - "ui/src/components/MessageBubble.vue"
+  - "ui/src/components/MessageBubble.test.ts"
   - "ui/src/components/ChatInput.vue"
+  - "ui/src/components/ChatInput.test.ts"
   - "ui/src/lib/llmProvider.ts"
   - "ui/src/lib/mockResponder.ts"
+  - "ui/src/lib/mockResponder.test.ts"
+  - "ui/src/lib/types.ts"
   - "README.md"
 created: "2026-06-30"
 ---
@@ -44,6 +48,7 @@ created: "2026-06-30"
 | Create | `ui/` — full Vite + Vue 3 + TS + Tailwind scaffold | Project bootstrap |
 | Create | `ui/src/lib/llmProvider.ts` | Abstract interface for any AI backend |
 | Create | `ui/src/lib/mockResponder.ts` | Random answers with delay for demo |
+| Create | `ui/src/lib/types.ts` | Shared Message type |
 | Create | `ui/src/components/MessageBubble.vue` | Reusable message display |
 | Create | `ui/src/components/MessageList.vue` | Scrollable list with auto-scroll |
 | Create | `ui/src/components/ChatInput.vue` | Text input + send affordance |
