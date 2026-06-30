@@ -1,0 +1,41 @@
+# Universal secrets (apply everywhere)
+# Environment / dotenv
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Private keys & certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.der
+id_rsa
+id_ed25519
+*.ppk
+
+# Generic secret/credential files
+secrets.*
+*.secret
+credentials.json
+credentials.yml
+*-credentials.json
+service-account*.json
+
+# Editors & OS cruft
+# JetBrains
+/.idea
+*.iml
+
+# VS Code (keep shared config if the team wants it)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# macOS / Windows / Linux
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
