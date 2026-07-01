@@ -27,6 +27,9 @@ service-account*.json
 # Project config with API keys
 ake.json
 
+# Skill eval workspaces (transient artifacts)
+*-workspace/
+
 # Editors & OS cruft
 # JetBrains
 /.idea
