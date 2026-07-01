@@ -30,7 +30,7 @@ describe('AnthropicProvider', () => {
     const fetchSpy = mockFetch(200, { content: [{ type: 'text', text: 'Hello!' }] })
     vi.stubGlobal('fetch', fetchSpy)
 
-    const messages: Message[] = [{ id: '0', role: 'user', content: 'hi' }]
+    const messages: Message[] = [{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }]
     await provider.sendMessage(messages)
 
     const call = fetchSpy.mock.calls[0] as [string, RequestInit]
@@ -46,7 +46,7 @@ describe('AnthropicProvider', () => {
     const provider = new AnthropicProvider(testConfig)
     vi.stubGlobal('fetch', mockFetch(200, { content: [{ type: 'text', text: 'Hello!' }] }))
 
-    const response = await provider.sendMessage([{ id: '0', role: 'user', content: 'hi' }])
+    const response = await provider.sendMessage([{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }])
     expect(response).toBe('Hello!')
   })
 
@@ -54,7 +54,7 @@ describe('AnthropicProvider', () => {
     const provider = new AnthropicProvider(testConfig)
     vi.stubGlobal('fetch', mockFetch(500, { error: 'Server error' }))
 
-    await expect(provider.sendMessage([{ id: '0', role: 'user', content: 'hi' }])).rejects.toThrow(
+    await expect(provider.sendMessage([{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }])).rejects.toThrow(
       'Anthropic API error 500',
     )
   })
@@ -65,8 +65,8 @@ describe('AnthropicProvider', () => {
     vi.stubGlobal('fetch', fetchSpy)
 
     const messages: Message[] = [
-      { id: '0', role: 'system', content: 'You are helpful.' },
-      { id: '1', role: 'user', content: 'hi' },
+      { id: '0', role: 'system', content: 'You are helpful.', timestamp: '2026-07-01 00:00:00' },
+      { id: '1', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' },
     ]
     await provider.sendMessage(messages)
 
@@ -110,7 +110,7 @@ describe('AnthropicProvider', () => {
 
     const chunks: string[] = []
     await provider.sendMessageStream(
-      [{ id: '0', role: 'user', content: 'hi' }],
+      [{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }],
       (chunk) => chunks.push(chunk),
     )
 

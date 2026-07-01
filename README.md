@@ -31,7 +31,7 @@ python3 -m http.server 8000
 ├── skill/             # opencode skills (loaded by LLM via LlmProvider)
 │   └── project-initializer/    # 项目初始化助手技能
 ├── ui/                # Vue 3 frontend (requires npm)
-├── ui_lite/           # Zero-dependency demo (single HTML, no install)
+├── ui_lite/           # Zero-dependency demo (markdown, copy, timestamps)
 │   └── index.html     #   open in browser or serve with any HTTP server
 ├── specs/             # feature specifications (SDD workflow)
 │   ├── 001-chat-ui/

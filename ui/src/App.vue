@@ -55,6 +55,10 @@ provide('llmProvider', wrappedProvider)
 
 let nextId = 0
 
+function ts(): string {
+  return new Date().toISOString().replace('T', ' ').slice(0, 19)
+}
+
 const messages = ref<Message[]>([])
 const visibleMessages = computed(() => messages.value.filter((m) => m.role !== 'system'))
 const isTyping = ref(false)
@@ -83,12 +87,14 @@ async function initProvider() {
             id: String(nextId++),
             role: 'system',
             content: msg.content,
+            timestamp: ts(),
           })
         }
         messages.value.push({
           id: String(nextId++),
           role: 'assistant',
           content: '你好！我是项目初始化助手。请告诉我你想创建什么样的知识工程项目？',
+          timestamp: ts(),
         })
         return
       }
@@ -105,14 +111,14 @@ async function initProvider() {
     id: String(nextId++),
     role: 'assistant',
     content: "Hello! How can I help you today?",
+    timestamp: ts(),
   })
 }
 
 onMounted(initProvider)
 
 async function handleSend(text: string) {
-  const userMsg: Message = { id: String(nextId++), role: 'user', content: text }
-  messages.value.push(userMsg)
+  messages.value.push({ id: String(nextId++), role: 'user', content: text, timestamp: ts() })
 
   isTyping.value = true
   const p = provider.value
@@ -120,7 +126,7 @@ async function handleSend(text: string) {
     if (typeof p.sendMessageStream === 'function') {
       const assistantId = String(nextId++)
       const index = messages.value.length
-      messages.value.push({ id: assistantId, role: 'assistant', content: '' })
+      messages.value.push({ id: assistantId, role: 'assistant', content: '', timestamp: ts() })
 
       await p.sendMessageStream(messages.value, (chunk) => {
         const msg = messages.value[index]
@@ -128,7 +134,7 @@ async function handleSend(text: string) {
       })
     } else {
       const response = await p.sendMessage(messages.value)
-      messages.value.push({ id: String(nextId++), role: 'assistant', content: response })
+      messages.value.push({ id: String(nextId++), role: 'assistant', content: response, timestamp: ts() })
     }
   } finally {
     isTyping.value = false

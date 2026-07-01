@@ -22,8 +22,12 @@ const provider = inject<LlmProvider>('llmProvider')!
 
 let nextId = 0
 
+function ts(): string {
+  return new Date().toISOString().replace('T', ' ').slice(0, 19)
+}
+
 const messages = ref<Message[]>([
-  { id: String(nextId++), role: 'assistant', content: "Hello! How can I help you today?" },
+  { id: String(nextId++), role: 'assistant', content: "Hello! How can I help you today?", timestamp: ts() },
 ])
 
 const visibleMessages = computed(() => messages.value.filter((m) => m.role !== 'system'))
@@ -31,15 +35,14 @@ const visibleMessages = computed(() => messages.value.filter((m) => m.role !== '
 const isTyping = ref(false)
 
 async function handleSend(text: string) {
-  const userMsg: Message = { id: String(nextId++), role: 'user', content: text }
-  messages.value.push(userMsg)
+  messages.value.push({ id: String(nextId++), role: 'user', content: text, timestamp: ts() })
 
   isTyping.value = true
   try {
     if (typeof provider.sendMessageStream === 'function') {
       const assistantId = String(nextId++)
       const index = messages.value.length
-      messages.value.push({ id: assistantId, role: 'assistant', content: '' })
+      messages.value.push({ id: assistantId, role: 'assistant', content: '', timestamp: ts() })
 
       await provider.sendMessageStream(messages.value, (chunk) => {
         const msg = messages.value[index]
@@ -47,7 +50,7 @@ async function handleSend(text: string) {
       })
     } else {
       const response = await provider.sendMessage(messages.value)
-      messages.value.push({ id: String(nextId++), role: 'assistant', content: response })
+      messages.value.push({ id: String(nextId++), role: 'assistant', content: response, timestamp: ts() })
     }
   } finally {
     isTyping.value = false

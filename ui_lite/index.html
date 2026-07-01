@@ -137,6 +137,25 @@
 
   .messages::-webkit-scrollbar { width: 4px; }
   .messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 2px; }
+
+  .msg-row { display: flex; flex-direction: column; }
+  .msg-row.user { align-items: flex-end; }
+  .msg-row.assistant { align-items: flex-start; }
+  .msg-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; padding: 0 2px; }
+  .msg-meta.user { flex-direction: row-reverse; }
+  .msg-meta .ts { font-size: 10px; color: var(--muted); opacity: 0.6; }
+  .msg-meta .copy-btn { font-size: 10px; color: var(--muted); opacity: 0.35; cursor: pointer; background: none; border: none; font-family: inherit; display: flex; align-items: center; gap: 3px; padding: 0; transition: opacity 0.15s; }
+  .msg-meta .copy-btn:hover { opacity: 0.7; }
+  .msg-meta .copy-btn svg { width: 11px; height: 11px; }
+
+  .msg [class*="code"] { background: rgba(0,0,0,0.08); padding: 1px 4px; border-radius: 3px; font-size: 0.85em; font-family: ui-monospace, Consolas, monospace; }
+  .msg pre { background: rgba(0,0,0,0.08); padding: 10px 12px; border-radius: 8px; overflow-x: auto; margin: 4px 0; }
+  .msg pre code { background: transparent; padding: 0; }
+  .msg a { text-decoration: underline; text-underline-offset: 2px; }
+  .msg strong { font-weight: 600; }
+  .msg ul, .msg ol { padding-left: 18px; margin: 2px 0; }
+  .msg li { margin: 2px 0; }
+
 </style>
 </head>
 <body>
@@ -208,14 +227,69 @@ function scrollBottom() {
   el.messages.scrollTop = el.messages.scrollHeight;
 }
 
+function now() {
+  return new Date().toISOString().replace('T', ' ').slice(0, 19);
+}
+
+function copyContent(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const s = btn.querySelector('span');
+    if (!s) { btn.innerHTML += ' <span>Copied!</span>'; }
+    else { s.textContent = 'Copied!'; }
+    setTimeout(() => {
+      const sp = btn.querySelector('span');
+      if (sp) sp.remove();
+    }, 1500);
+  }).catch(() => {});
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function inlineMd(s) {
+  return s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+}
+
+function renderMarkdown(text) {
+  let h = escapeHtml(text);
+  h = h.replace(/```(\w*)\n?([\s\S]*?)```/g, function(_, lang, code){ return '<pre><code>'+code.trim()+'</code></pre>'; });
+  var blocks=[], cur='', inList=null, lines=h.split('\n');
+  for (var i=0;i<=lines.length;i++) {
+    var line=i<lines.length?lines[i]:'', t=line.trim();
+    if (t==='') { if(inList){blocks.push('</'+inList+'>');inList=null;} if(cur){blocks.push('<p>'+inlineMd(cur.trim())+'</p>');cur='';} continue; }
+    var ul=t.match(/^[-*]\s+(.+)/); if(ul) { if(inList!=='ul'){if(inList)blocks.push('</'+inList+'>');blocks.push('<ul>');inList='ul';} blocks.push('<li>'+inlineMd(ul[1])+'</li>'); continue; }
+    var ol=t.match(/^\d+\.\s+(.+)/); if(ol) { if(inList!=='ol'){if(inList)blocks.push('</'+inList+'>');blocks.push('<ol>');inList='ol';} blocks.push('<li>'+inlineMd(ol[1])+'</li>'); continue; }
+    if(inList){blocks.push('</'+inList+'>');inList=null;} if(cur)cur+='\n'; cur+=line;
+  }
+  if(cur)blocks.push('<p>'+inlineMd(cur)+'</p>');
+  return blocks.join('');
+}
+
 function render() {
   el.messages.innerHTML = '';
   for (const m of state.messages) {
     if (m.role === 'system') continue;
-    const d = document.createElement('div');
-    d.className = `msg ${m.role}`;
-    d.innerHTML = `<div class="label">${m.role === 'user' ? 'You' : 'Assistant'}</div><div>${m.content}</div>`;
-    el.messages.appendChild(d);
+    const row = document.createElement('div');
+    row.className = `msg-row ${m.role}`;
+
+    const bubble = document.createElement('div');
+    bubble.className = `msg ${m.role}`;
+    bubble.innerHTML = `<div class="label">${m.role === 'user' ? 'You' : 'Assistant'}</div><div>${renderMarkdown(m.content)}</div>`;
+    row.appendChild(bubble);
+
+    const meta = document.createElement('div');
+    meta.className = `msg-meta ${m.role}`;
+    meta.innerHTML = `<span class="ts">${m.timestamp || ''}</span>`;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    btn.title = 'Copy message';
+    btn.addEventListener('click', () => copyContent(m.content, btn));
+    meta.appendChild(btn);
+    row.appendChild(meta);
+
+    el.messages.appendChild(row);
   }
   scrollBottom();
 }
@@ -270,7 +344,7 @@ function send() {
   el.input.style.height = 'auto';
   el.sendBtn.disabled = true;
 
-  state.messages.push({ id: String(state.nextId++), role: 'user', content: text });
+  state.messages.push({ id: String(state.nextId++), role: 'user', content: text, timestamp: now() });
   render();
 
   handleSend(text);
@@ -291,7 +365,7 @@ async function handleSend(text) {
     }
   } catch (err) {
     console.error('Send error:', err);
-    state.messages.push({ id: String(state.nextId++), role: 'assistant', content: 'Sorry, something went wrong. Please try again.' });
+    state.messages.push({ id: String(state.nextId++), role: 'assistant', content: 'Sorry, something went wrong. Please try again.', timestamp: now() });
   } finally {
     showTyping(false);
     disableInput(false);
@@ -303,7 +377,7 @@ async function handleSend(text) {
 async function mockResponse() {
   await sleep(300 + Math.random() * 1200);
   const msg = MOCK_RESPONSES[Math.floor(Math.random() * MOCK_RESPONSES.length)];
-  state.messages.push({ id: String(state.nextId++), role: 'assistant', content: msg });
+  state.messages.push({ id: String(state.nextId++), role: 'assistant', content: msg, timestamp: now() });
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -316,7 +390,7 @@ async function streamResponse() {
   const messages = state.messages.map(m => ({ role: m.role, content: m.content }));
   const aid = String(state.nextId++);
   const idx = state.messages.length;
-  state.messages.push({ id: aid, role: 'assistant', content: '' });
+  state.messages.push({ id: aid, role: 'assistant', content: '', timestamp: now() });
 
   if (cfg.provider === 'anthropic') {
     await streamAnthropic(cfg, messages, idx);
@@ -438,6 +512,7 @@ async function init() {
     id: String(state.nextId++),
     role: 'assistant',
     content: hasSkills ? '你好！我是项目初始化助手。请告诉我你想创建什么样的知识工程项目？' : "Hello! How can I help you today?",
+    timestamp: now(),
   });
   render();
 }
@@ -459,6 +534,7 @@ async function loadSkills() {
           id: `skill-${state.nextId++}`,
           role: 'system',
           content: `[Skill: ${name}]\n\n${content}`,
+          timestamp: now(),
         });
       }
     } catch {}

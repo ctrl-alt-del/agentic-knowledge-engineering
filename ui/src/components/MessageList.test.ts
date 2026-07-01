@@ -5,8 +5,8 @@ import type { Message } from '../lib/types'
 
 describe('MessageList', () => {
   const messages: Message[] = [
-    { id: '1', role: 'assistant', content: 'Hello!' },
-    { id: '2', role: 'user', content: 'Hi there' },
+    { id: '1', role: 'assistant', content: 'Hello!', timestamp: '2026-07-01 17:00:00' },
+    { id: '2', role: 'user', content: 'Hi there', timestamp: '2026-07-01 17:00:01' },
   ]
 
   it('renders all messages', () => {

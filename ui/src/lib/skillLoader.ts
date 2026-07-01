@@ -1,6 +1,10 @@
 import type { Message } from './types'
 import type { SkillConfig } from './config'
 
+function ts(): string {
+  return new Date().toISOString().replace('T', ' ').slice(0, 19)
+}
+
 export async function loadSkills(config: SkillConfig): Promise<Message[]> {
   const systemMessages: Message[] = []
   let id = 0
@@ -21,6 +25,7 @@ export async function loadSkills(config: SkillConfig): Promise<Message[]> {
           id: `skill-${id++}`,
           role: 'system',
           content: `[Skill: ${skillName}]\n\n${content}`,
+          timestamp: ts(),
         })
       } catch (err) {
         console.warn(`Failed to load skill ${skillName}:`, err)

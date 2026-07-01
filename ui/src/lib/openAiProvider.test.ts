@@ -30,7 +30,7 @@ describe('OpenAiProvider', () => {
     const fetchSpy = mockFetch(200, { choices: [{ message: { content: 'Hello!' } }] })
     vi.stubGlobal('fetch', fetchSpy)
 
-    const messages: Message[] = [{ id: '0', role: 'user', content: 'hi' }]
+    const messages: Message[] = [{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }]
     await provider.sendMessage(messages)
 
     const call = fetchSpy.mock.calls[0] as [string, RequestInit]
@@ -45,7 +45,7 @@ describe('OpenAiProvider', () => {
     const provider = new OpenAiProvider(testConfig)
     vi.stubGlobal('fetch', mockFetch(200, { choices: [{ message: { content: 'Hello!' } }] }))
 
-    const response = await provider.sendMessage([{ id: '0', role: 'user', content: 'hi' }])
+    const response = await provider.sendMessage([{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }])
     expect(response).toBe('Hello!')
   })
 
@@ -53,7 +53,7 @@ describe('OpenAiProvider', () => {
     const provider = new OpenAiProvider(testConfig)
     vi.stubGlobal('fetch', mockFetch(401, { error: 'Unauthorized' }))
 
-    await expect(provider.sendMessage([{ id: '0', role: 'user', content: 'hi' }])).rejects.toThrow(
+    await expect(provider.sendMessage([{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }])).rejects.toThrow(
       'OpenAI API error 401',
     )
   })
@@ -64,8 +64,8 @@ describe('OpenAiProvider', () => {
     vi.stubGlobal('fetch', fetchSpy)
 
     const messages: Message[] = [
-      { id: '0', role: 'system', content: 'You are helpful.' },
-      { id: '1', role: 'user', content: 'hi' },
+      { id: '0', role: 'system', content: 'You are helpful.', timestamp: '2026-07-01 00:00:00' },
+      { id: '1', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' },
     ]
     await provider.sendMessage(messages)
 
@@ -106,7 +106,7 @@ describe('OpenAiProvider', () => {
 
     const chunks: string[] = []
     await provider.sendMessageStream(
-      [{ id: '0', role: 'user', content: 'hi' }],
+      [{ id: '0', role: 'user', content: 'hi', timestamp: '2026-07-01 00:00:00' }],
       (chunk) => chunks.push(chunk),
     )
 

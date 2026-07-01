@@ -13,6 +13,7 @@
 - **#llm**: Anthropic API's `system` field goes at the request body top level, not inside `messages[]`. The `system` role messages must be extracted from the conversation array and placed separately. OpenAI embeds system messages directly in the `messages[]` array.
 - **#llm**: Vite browser environment has no `process.env`. Use `import.meta.env` for environment variables instead.
 - **#vue**: `shallowRef` + wrapper pattern — when `provide/inject` dependencies need runtime replacement, wrap the actual implementation in a `shallowRef` and provide a proxy object that delegates to `.value`. The proxy's method calls always resolve to the current value.
+- **#ui**: TypeScript ESM module scope — function declarations are NOT reliably hoisted when transpiled via `tsx` or similar tools. Define helper functions BEFORE the functions that call them, even if they would be hoisted in standard JavaScript.
 
 ## Patterns That Worked
 <!-- Reusable patterns discovered across features -->
@@ -26,6 +27,8 @@
 - **Config-driven provider pattern**: Single JSON config file controls LLM type, model, API parameters, and skill auto-loading. Provider factory creates the right implementation at runtime. Switching from mock to real API is a one-line config change.
 - **SSE stream parsing via `fetch().body.getReader()`**: No SDK needed. Both OpenAI (`data:` lines + `[DONE]`) and Anthropic (`event:`/`data:` lines + `message_stop`) SSE formats can be parsed with the same reader pattern, isolating protocol differences in each provider class.
 - **`shallowRef` for injectable services**: When a service needs dynamic replacement after setup, hold the actual implementation in a `shallowRef` and provide a stable proxy object. Components inject once, always get the current implementation.
+- **Zero-dependency markdown parser**: Four-stage pipeline: HTML-escape → code block isolation → paragraph/list block parsing → inline markdown replacement. Covers 90%+ of chat content with zero npm dependencies. Usable in both TypeScript modules and inline `<script>`.
+- **Copy-to-clipboard UX**: `navigator.clipboard.writeText()` + brief visual feedback ("Copied!" for 1.5s). Graceful fallback if clipboard API unavailable. Works in all modern browsers in secure contexts.
 
 ## Architecture Decisions
 <!-- ADRs made during spec-driven development -->
@@ -66,7 +69,9 @@
 | `ui/src/App.vue` | 001-chat-ui, 003-llm-api-config | Provider wiring + skill loading |
 | `ui/src/lib/llmProvider.ts` | 001-chat-ui, 003-llm-api-config | Core abstraction (updated: streaming + messages array) |
 | `ui/src/lib/types.ts` | 001-chat-ui, 003-llm-api-config | Shared Message type (updated: system role) |
-| `ui_lite/index.html` | 001-chat-ui, 003-llm-api-config | Zero-dependency demo: pure HTML/CSS/JS chat UI |
+| `ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy | Zero-dependency demo: pure HTML/CSS/JS chat UI |
+| `ui/src/lib/markdown.ts` | 004-chat-markdown-copy | Zero-dependency markdown parser |
+| `ui/src/components/MessageBubble.vue` | 001-chat-ui, 004-chat-markdown-copy | Single message rendering (updated: markdown, copy, timestamp) |
 
 ## Common Bugs Fixed
 

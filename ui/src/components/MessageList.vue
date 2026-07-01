@@ -8,6 +8,7 @@
       :key="msg.id"
       :role="msg.role"
       :content="msg.content"
+      :timestamp="msg.timestamp"
     />
 
     <div v-if="isTyping" class="self-start px-4 py-3 rounded-2xl rounded-bl-md bg-cool-assistant flex gap-1.5 items-center">
