@@ -4,11 +4,13 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 
 - **UI**: Vue 3 + TypeScript + Tailwind CSS (Vite)
 - **Testing**: Vitest + @vue/test-utils
+- **Skills**: Open-code skills in `skill/` directory, loaded by LLM via `LlmProvider`
 
 ## Project Conventions
 
 - Spec-driven development: all features start in `specs/` before any code
 - One task = one commit with passing build + tests
+- Skills live in `skill/` directory; each skill follows the Skill Creator workflow (draft → eval → iterate)
 - See `specs/SDD.md` for the full workflow
 
 ## Triggering Feature Development

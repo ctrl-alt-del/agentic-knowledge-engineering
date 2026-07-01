@@ -1,7 +1,7 @@
 ---
 feature_id: "002"
 name: "项目初始化助手技能"
-status: "🚧 In Progress"
+status: "✅ Done"
 depends_on: ["001-chat-ui"]
 touches:
   - "skill/project-initializer/SKILL.md"

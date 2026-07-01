@@ -1,10 +1,23 @@
-# [Feature Name] — Takeaways
+# 项目初始化助手技能 — 复盘
 
-## What Went Well
+## 做得好的
 
-## What We Learned
+- **评估驱动的开发**：在编写技能后立即运行 8 个并行评估，快速发现了技能与无技能的巨大差距（97.8% vs 0%），证明了技能的价值。
+- **渐进披露设计**：将字段定义、MCP 配置、输出 schema 分离到 references/，SKILL.md 保持在 200 行左右，LLM 按需加载额外上下文。
+- **断点续填**：state.json 机制在 eval-3 中完美工作，恢复了之前填写的值并从正确阶段继续。
+- **对话流程设计**：7 阶段对话流程覆盖了从新手到专家的所有用户场景。新手评估中 LLM 友好地解释了所有术语并推荐了模板；专家评估中 LLM 直奔主题，没有冗余对话。
 
-## API / Tech Surprises
+## 学到的
 
-## Patterns Worth Reusing
-<!-- These get promoted to root MEMORY.md after ship -->
+- **Skill Creator 评估工作流**：并行运行 8 个子代理 + Grading 脚本 + mkviewer 的流程虽然步骤多，但跑通后发现非常高效。花时间最长的部分是等子代理完成。
+- **隐式需求必须显式化**：用户说"需要日志提取接口"但没提供 URL 时，技能默认填了 null 而非询问。这说明在技能中需要把"必须询问"的规则写得非常明确，不能靠 LLM 自行推断。
+
+## 技术惊喜
+
+- **无技能基线直接失效**：在 4 个评估中，无技能运行的输出 JSON 100% 不符合 output-schema.json。LLM 自己发明的字段名（如 `capabilities`、`custom_capabilities`、`repos` 的格式为 `{owner, repo}` 而非 `{url}`）与 schema 完全不匹配。这强烈证明了形式化 schema + 技能指导的必要性。
+- **@vue/test-utils 测试不受影响**：技能和评估文件为纯 markdown/json，不影响 ui/ 的 23 个 Vue 组件测试。
+
+## 可复用模式
+
+- **Schema-first 技能输出**：在技能中提供一个精确的 JSON Schema 作为输出契约，显著提升输出一致性和可验证性。
+- **Eval 分级脚本**：`grade.py` 结合了 schema 验证和断言特定检查，可复用于任何输出结构化 JSON 的技能。
