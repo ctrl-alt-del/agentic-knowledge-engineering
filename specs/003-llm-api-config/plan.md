@@ -1,7 +1,7 @@
 ---
 feature_id: "003"
 name: "LLM API 配置"
-status: "🚧 In Progress"
+status: "✅ Done"
 depends_on: ["001-chat-ui", "002-project-initializer-skill"]
 touches:
   - "ake.example.json"

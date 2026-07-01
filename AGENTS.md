@@ -11,6 +11,7 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 - Spec-driven development: all features start in `specs/` before any code
 - One task = one commit with passing build + tests
 - Skills live in `skill/` directory; each skill follows the Skill Creator workflow (draft → eval → iterate)
+- `ake.json` is gitignored; `ake.example.json` is the committed template. Never commit real API keys
 - See `specs/SDD.md` for the full workflow
 
 ## Triggering Feature Development
