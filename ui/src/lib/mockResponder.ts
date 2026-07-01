@@ -1,4 +1,5 @@
 import type { LlmProvider } from './llmProvider'
+import type { Message } from './types'
 
 const RESPONSES = [
   "That's an interesting question! Let me think about it...",
@@ -22,7 +23,7 @@ function randomDelay(): number {
 }
 
 export class MockResponder implements LlmProvider {
-  async sendMessage(_content: string): Promise<string> {
+  async sendMessage(_messages: Message[]): Promise<string> {
     await new Promise((resolve) => setTimeout(resolve, randomDelay()))
     return randomItem(RESPONSES)
   }
