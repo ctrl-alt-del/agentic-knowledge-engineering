@@ -12,6 +12,7 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 - One task = one commit with passing build + tests
 - Skills live in `skill/` directory; each skill follows the Skill Creator workflow (draft → eval → iterate)
 - `ake.json` is gitignored; `ake.example.json` is the committed template. Never commit real API keys
+- `ui_lite/` is the zero-dependency demo — single HTML file, no install, served by any HTTP server
 - See `specs/SDD.md` for the full workflow
 
 ## Triggering Feature Development

@@ -12,11 +12,15 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 cp ake.example.json ake.json
 # Edit ake.json with your API credentials (provider, apiKey, baseURL, model)
 
-# 2. Start the UI
+# 2. Option A: Vue dev server (requires npm)
 cd ui
 npm install
 npm run dev    # start dev server
 npm test       # run tests
+
+# 2. Option B: Zero-dependency demo (no npm needed)
+python3 -m http.server 8000
+# Open http://localhost:8000/ui_lite/
 ```
 
 ## Project Structure
@@ -26,10 +30,9 @@ npm test       # run tests
 ├── ake.schema.json    # Config JSON Schema
 ├── skill/             # opencode skills (loaded by LLM via LlmProvider)
 │   └── project-initializer/    # 项目初始化助手技能
-├── ui/                # Vue 3 frontend
-│   └── src/
-│       ├── components/   # Chat UI components
-│       └── lib/          # LlmProvider, OpenAi/Anthropic providers, skillLoader
+├── ui/                # Vue 3 frontend (requires npm)
+├── ui_lite/           # Zero-dependency demo (single HTML, no install)
+│   └── index.html     #   open in browser or serve with any HTTP server
 ├── specs/             # feature specifications (SDD workflow)
 │   ├── 001-chat-ui/
 │   ├── 002-project-initializer-skill/

@@ -66,6 +66,7 @@
 | `ui/src/App.vue` | 001-chat-ui, 003-llm-api-config | Provider wiring + skill loading |
 | `ui/src/lib/llmProvider.ts` | 001-chat-ui, 003-llm-api-config | Core abstraction (updated: streaming + messages array) |
 | `ui/src/lib/types.ts` | 001-chat-ui, 003-llm-api-config | Shared Message type (updated: system role) |
+| `ui_lite/index.html` | 001-chat-ui, 003-llm-api-config | Zero-dependency demo: pure HTML/CSS/JS chat UI |
 
 ## Common Bugs Fixed
 

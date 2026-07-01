@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Assistant</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --warm-bg: #f8f5f0;
+    --warm-user: #d4b896;
+    --cool-assistant: #e8ecf0;
+    --dark-text: #3d3929;
+    --cool-text: #2a3040;
+    --send: #3d3929;
+    --send-hover: #2d2818;
+    --muted: #9b9682;
+    --placeholder: #c4bfb0;
+    --border: rgba(0,0,0,0.06);
+    --focus-ring: rgba(196,184,150,0.25);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #e8e4dc;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; padding: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .frame {
+    width: 480px; max-width: 100%; height: 700px; max-height: 90vh;
+    background: var(--warm-bg);
+    border-radius: 24px;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .header-left h1 {
+    font-size: 15px; font-weight: 600; color: var(--dark-text);
+    letter-spacing: -0.01em; line-height: 1.3;
+  }
+  .header-left p {
+    font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 1px;
+  }
+  .status {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--muted); white-space: nowrap;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  }
+  .status-dot.green { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+  .status-dot.yellow { background: #facc15; box-shadow: 0 0 6px rgba(250,204,21,0.4); }
+  .status-dot.red { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.4); }
+
+  .messages {
+    flex: 1; overflow-y: auto; padding: 20px 20px 8px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+
+  .msg {
+    max-width: 82%; padding: 12px 16px; border-radius: 18px;
+    font-size: 14px; line-height: 1.6; letter-spacing: -0.005em;
+    animation: msg-in 0.28s ease-out; word-break: break-word;
+  }
+  .msg.user {
+    align-self: flex-end; background: var(--warm-user);
+    color: var(--dark-text); border-bottom-right-radius: 6px;
+  }
+  .msg.assistant {
+    align-self: flex-start; background: var(--cool-assistant);
+    color: var(--cool-text); border-bottom-left-radius: 6px;
+  }
+  .msg .label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 4px; opacity: 0.45;
+  }
+
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .typing {
+    align-self: flex-start; padding: 14px 16px; border-radius: 18px;
+    border-bottom-left-radius: 6px; background: var(--cool-assistant);
+    display: flex; gap: 4px; align-items: center;
+  }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%; background: #b0b8c4;
+    animation: bounce 1.4s ease-in-out infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.18s; }
+  .typing span:nth-child(3) { animation-delay: 0.36s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); background: #8b94a0; }
+  }
+
+  .input-area {
+    padding: 12px 20px 18px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0;
+  }
+
+  textarea {
+    flex: 1; padding: 12px 16px; border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px; font-family: inherit; font-size: 14px; font-weight: 400;
+    color: var(--dark-text); background: #fff; outline: none; resize: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 44px; max-height: 120px; line-height: 1.45;
+    &::placeholder { color: var(--placeholder); }
+    &:focus { border-color: #c4b896; box-shadow: 0 0 0 3px var(--focus-ring); }
+    &:disabled { opacity: 0.5; }
+  }
+
+  .send-btn {
+    width: 44px; height: 44px; border-radius: 14px; border: none;
+    background: var(--send); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, transform 0.1s, opacity 0.15s;
+    flex-shrink: 0;
+    &:hover:not(:disabled) { background: var(--send-hover); }
+    &:active:not(:disabled) { transform: scale(0.94); }
+    &:disabled { opacity: 0.25; cursor: default; }
+    svg { width: 18px; height: 18px; }
+  }
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="header">
+    <div class="header-left">
+      <h1>Assistant</h1>
+      <p>Ready to help</p>
+    </div>
+    <div class="status">
+      <span class="status-dot yellow" id="status-dot"></span>
+      <span id="status-label">Mock</span>
+    </div>
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-area">
+    <textarea id="input" placeholder="Type a message..." rows="1"></textarea>
+    <button class="send-btn" id="send-btn" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f8f5f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   State
+   ================================================================ */
+const MOCK_RESPONSES = [
+  "这是一个很好的问题！让我想一下...",
+  "我建议把这个问题分解成几个小步骤来处理。",
+  "好观点！我认为关键在于打好坚实的基础。",
+  "根据你的描述，我建议换个角度看看。",
+  "谢谢你分享这个。让我提供一个不同的视角。",
+  "这是一个常见的挑战。通常的解决方案需要仔细规划。",
+  "我理解你的意思了。你考虑过从用户角度出发吗？",
+  "好问题！这里有几件事需要记住...",
+  "根据我的理解，最佳实践是从小处着手，然后迭代。",
+  "有意思！让我分享一些处理这个问题的思路。",
+];
+
+const state = {
+  messages: [],
+  provider: null,
+  config: null,
+  status: 'mock',   // 'connected' | 'mock' | 'error'
+  statusLabel: 'Mock',
+  nextId: 0,
+};
+
+/* ================================================================
+   DOM refs
+   ================================================================ */
+const el = {
+  messages: document.getElementById('messages'),
+  input: document.getElementById('input'),
+  sendBtn: document.getElementById('send-btn'),
+  statusDot: document.getElementById('status-dot'),
+  statusLabel: document.getElementById('status-label'),
+};
+
+/* ================================================================
+   Render
+   ================================================================ */
+function scrollBottom() {
+  el.messages.scrollTop = el.messages.scrollHeight;
+}
+
+function render() {
+  el.messages.innerHTML = '';
+  for (const m of state.messages) {
+    if (m.role === 'system') continue;
+    const d = document.createElement('div');
+    d.className = `msg ${m.role}`;
+    d.innerHTML = `<div class="label">${m.role === 'user' ? 'You' : 'Assistant'}</div><div>${m.content}</div>`;
+    el.messages.appendChild(d);
+  }
+  scrollBottom();
+}
+
+function showTyping(visible) {
+  const existing = el.messages.querySelector('.typing');
+  if (visible && !existing) {
+    const d = document.createElement('div');
+    d.className = 'typing';
+    d.innerHTML = '<span></span><span></span><span></span>';
+    el.messages.appendChild(d);
+    scrollBottom();
+  } else if (!visible && existing) {
+    existing.remove();
+  }
+}
+
+function updateStatus(status, label) {
+  state.status = status;
+  state.statusLabel = label;
+  el.statusDot.className = `status-dot ${status}`;
+  el.statusLabel.textContent = label;
+}
+
+function disableInput(disabled) {
+  el.input.disabled = disabled;
+  el.sendBtn.disabled = disabled || !el.input.value.trim();
+}
+
+/* ================================================================
+   Input
+   ================================================================ */
+el.input.addEventListener('input', () => {
+  el.input.style.height = 'auto';
+  el.input.style.height = Math.min(el.input.scrollHeight, 120) + 'px';
+  el.sendBtn.disabled = !el.input.value.trim() || el.input.disabled;
+});
+
+el.input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+});
+
+el.sendBtn.addEventListener('click', send);
+
+function send() {
+  const text = el.input.value.trim();
+  if (!text) return;
+  el.input.value = '';
+  el.input.style.height = 'auto';
+  el.sendBtn.disabled = true;
+
+  state.messages.push({ id: String(state.nextId++), role: 'user', content: text });
+  render();
+
+  handleSend(text);
+}
+
+/* ================================================================
+   Message handling
+   ================================================================ */
+async function handleSend(text) {
+  disableInput(true);
+  showTyping(true);
+
+  try {
+    if (state.config) {
+      await streamResponse();
+    } else {
+      await mockResponse();
+    }
+  } catch (err) {
+    console.error('Send error:', err);
+    state.messages.push({ id: String(state.nextId++), role: 'assistant', content: 'Sorry, something went wrong. Please try again.' });
+  } finally {
+    showTyping(false);
+    disableInput(false);
+    el.input.focus();
+    render();
+  }
+}
+
+async function mockResponse() {
+  await sleep(300 + Math.random() * 1200);
+  const msg = MOCK_RESPONSES[Math.floor(Math.random() * MOCK_RESPONSES.length)];
+  state.messages.push({ id: String(state.nextId++), role: 'assistant', content: msg });
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ================================================================
+   LLM streaming (OpenAI-compatible + Anthropic)
+   ================================================================ */
+async function streamResponse() {
+  const cfg = state.config.llm;
+  const messages = state.messages.map(m => ({ role: m.role, content: m.content }));
+  const aid = String(state.nextId++);
+  const idx = state.messages.length;
+  state.messages.push({ id: aid, role: 'assistant', content: '' });
+
+  if (cfg.provider === 'anthropic') {
+    await streamAnthropic(cfg, messages, idx);
+  } else {
+    await streamOpenAI(cfg, messages, idx);
+  }
+}
+
+async function streamOpenAI(cfg, messages, idx) {
+  const res = await fetch(`${cfg.baseURL.replace(/\/$/,'')}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${cfg.apiKey}` },
+    body: JSON.stringify({
+      model: cfg.model,
+      messages,
+      temperature: cfg.options?.temperature ?? 0.7,
+      max_tokens: cfg.options?.maxTokens ?? 4096,
+      stream: true,
+    }),
+  });
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  await parseOpenAISSE(res.body.getReader(), idx);
+}
+
+async function streamAnthropic(cfg, messages, idx) {
+  const systemMsgs = messages.filter(m => m.role === 'system').map(m => m.content).join('\n\n');
+  const chatMsgs = messages.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }));
+  const body = { model: cfg.model, messages: chatMsgs, max_tokens: cfg.options?.maxTokens ?? 4096, stream: true };
+  if (systemMsgs) body.system = systemMsgs;
+  if (cfg.options?.temperature != null) body.temperature = cfg.options.temperature;
+
+  const res = await fetch(`${cfg.baseURL.replace(/\/$/,'')}/messages`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': cfg.apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  await parseAnthropicSSE(res.body.getReader(), idx);
+}
+
+async function parseOpenAISSE(reader, idx) {
+  const dec = new TextDecoder();
+  let buf = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n'); buf = lines.pop() || '';
+    for (const line of lines) {
+      if (!line.trim() || !line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+      if (data === '[DONE]') return;
+      try {
+        const c = JSON.parse(data)?.choices?.[0]?.delta?.content;
+        if (c) state.messages[idx].content += c;
+        render();
+      } catch {}
+    }
+  }
+}
+
+async function parseAnthropicSSE(reader, idx) {
+  const dec = new TextDecoder();
+  let buf = '', event = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n'); buf = lines.pop() || '';
+    for (const line of lines) {
+      const t = line.trim();
+      if (t.startsWith('event: ')) { event = t.slice(7); continue; }
+      if (!t.startsWith('data: ')) continue;
+      if (event === 'content_block_delta') {
+        try {
+          const d = JSON.parse(t.slice(6));
+          if (d.delta?.text) state.messages[idx].content += d.delta.text;
+          render();
+        } catch {}
+      }
+      event = '';
+    }
+  }
+}
+
+/* ================================================================
+   Init
+   ================================================================ */
+async function init() {
+  // Try to load config
+  let configLoaded = false;
+  try {
+    const r = await fetch('/ake.json');
+    if (r.ok) {
+      const cfg = await r.json();
+      if (cfg.llm && cfg.llm.provider && cfg.llm.apiKey && cfg.llm.baseURL && cfg.llm.model) {
+        if (!['<PLACEHOLDER>',''].includes(cfg.llm.apiKey) &&
+            !['<PLACEHOLDER>',''].includes(cfg.llm.baseURL) &&
+            !['<PLACEHOLDER>',''].includes(cfg.llm.model)) {
+          state.config = cfg;
+          configLoaded = true;
+        }
+      }
+    }
+  } catch {}
+
+  if (configLoaded) {
+    updateStatus('connected', cfgLabel());
+  } else {
+    updateStatus('mock', 'Mock');
+  }
+
+  // Try loading skills
+  await loadSkills();
+
+  // Initial greeting
+  const hasSkills = state.messages.length > 0;
+  state.messages.push({
+    id: String(state.nextId++),
+    role: 'assistant',
+    content: hasSkills ? '你好！我是项目初始化助手。请告诉我你想创建什么样的知识工程项目？' : "Hello! How can I help you today?",
+  });
+  render();
+}
+
+function cfgLabel() {
+  const cfg = state.config.llm;
+  const prov = cfg.provider === 'anthropic' ? 'Anthropic' : 'OpenAI';
+  return `${prov} · ${cfg.model}`;
+}
+
+async function loadSkills() {
+  const names = state.config?.skills?.autoload || ['project-initializer'];
+  for (const name of names) {
+    try {
+      const r = await fetch(`/skill/${name}/SKILL.md`);
+      if (r.ok) {
+        const content = await r.text();
+        state.messages.push({
+          id: `skill-${state.nextId++}`,
+          role: 'system',
+          content: `[Skill: ${name}]\n\n${content}`,
+        });
+      }
+    } catch {}
+  }
+}
+
+init();
+</script>
+</body>
+</html>
