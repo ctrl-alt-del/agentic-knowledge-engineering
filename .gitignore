@@ -24,6 +24,9 @@ credentials.yml
 *-credentials.json
 service-account*.json
 
+# Project config with API keys
+ake.json
+
 # Editors & OS cruft
 # JetBrains
 /.idea
