@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识问答助手</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --warm-bg:#f8f5f0;--warm-user:#d4b896;--cool-asst:#e8ecf0;
+  --dark-text:#3d3929;--cool-text:#2a3040;
+  --send:#3d3929;--send-hover:#2d2818;--muted:#9b9682;
+  --placeholder:#c4bfb0;--border:rgba(0,0,0,0.06);--focus:rgba(196,184,150,0.25);
+  --side-w:260px;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#e8e4dc;display:flex;justify-content:center;align-items:center;
+  min-height:100vh;padding:16px;-webkit-font-smoothing:antialiased;
+}
+.app{
+  width:880px;max-width:100%;height:700px;max-height:95vh;
+  background:var(--warm-bg);border-radius:18px;
+  display:flex;overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04),0 8px 32px rgba(0,0,0,0.08);
+}
+/* ---- Sidebar ---- */
+.sidebar{
+  width:var(--side-w);flex-shrink:0;
+  background:#f2efe8;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:14px 12px;gap:12px;
+  overflow-y:auto;font-size:12px;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.08);border-radius:2px}
+.sec-title{
+  font-size:10px;font-weight:600;text-transform:uppercase;
+  letter-spacing:0.07em;color:var(--muted);margin-bottom:5px;
+}
+.src-item{
+  display:flex;align-items:center;gap:7px;padding:7px 9px;
+  border-radius:7px;background:#fff;font-size:12px;color:var(--cool-text);
+  box-shadow:0 1px 1px rgba(0,0,0,0.03);cursor:pointer;transition:opacity .15s;
+}
+.src-item.disabled{opacity:0.45}
+.src-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.src-dot.green{background:#22c55e}
+.src-dot.yellow{background:#facc15}
+.src-dot.red{background:#ef4444}
+.src-meta{font-size:9px;color:var(--muted);margin-left:auto}
+.add-btn{
+  padding:6px 9px;border:1px dashed #c4b896;border-radius:7px;
+  font-size:11px;color:var(--muted);text-align:center;cursor:pointer;
+  transition:border-color .15s,color .15s;margin-top:4px;
+}
+.add-btn:hover{border-color:#a09880;color:#6b6558}
+.settings-box{
+  background:#fff;border-radius:7px;padding:8px 10px;
+  box-shadow:0 1px 1px rgba(0,0,0,0.03);
+}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:2px 0}
+.set-val{color:var(--muted);font-size:11px} .set-val select{font-size:11px;border:1px solid var(--border);border-radius:4px;padding:1px}
+.mem-box{background:#fff;border-radius:7px;padding:8px 10px;box-shadow:0 1px 1px rgba(0,0,0,0.03)}
+.mem-stat{font-size:12px;font-weight:600;color:var(--cool-text)}
+.mem-sub{font-size:10px;color:var(--muted)}
+.btn-row{display:flex;gap:5px;margin-top:7px}
+.btn{
+  flex:1;padding:5px 0;border:1px solid #d8dfe6;border-radius:6px;
+  font-size:10px;text-align:center;color:#3a4a5c;cursor:pointer;
+  background:#fff;transition:background .15s;
+}
+.btn:hover{background:#f0f4f8}
+
+/* ---- Chat ---- */
+.chat{flex:1;display:flex;flex-direction:column;min-width:0}
+.chat-header{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.chat-header h1{font-size:14px;font-weight:600;color:var(--dark-text);letter-spacing:-.01em}
+.chat-header p{font-size:11px;color:var(--muted);margin-top:1px}
+.status{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);white-space:nowrap}
+.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.status-dot.green{background:#22c55e;box-shadow:0 0 5px rgba(34,197,94,0.4)}
+.status-dot.yellow{background:#facc15;box-shadow:0 0 5px rgba(250,204,21,0.4)}
+.status-dot.red{background:#ef4444;box-shadow:0 0 5px rgba(239,68,68,0.4)}
+
+.messages{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.messages::-webkit-scrollbar{width:3px}
+.messages::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.08);border-radius:2px}
+
+.msg{max-width:80%;padding:10px 14px;border-radius:15px;font-size:13px;line-height:1.6;word-break:break-word;animation:msg-in .28s ease-out}
+.msg.user{align-self:flex-end;background:var(--warm-user);color:var(--dark-text);border-bottom-right-radius:5px}
+.msg.assistant{align-self:flex-start;background:var(--cool-asst);color:var(--cool-text);border-bottom-left-radius:5px}
+.msg .label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;opacity:.45}
+@keyframes msg-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg .src{font-size:10px;color:var(--muted);margin-top:5px;padding-top:4px;border-top:1px solid rgba(0,0,0,0.06)}
+.msg .conf{font-size:10px;color:#8b94a0;margin-top:2px;font-style:italic}
+.msg code{background:rgba(0,0,0,0.08);padding:1px 4px;border-radius:3px;font-size:.85em;font-family:ui-monospace,Consolas,monospace}
+.msg pre{background:rgba(0,0,0,0.08);padding:8px 10px;border-radius:7px;overflow-x:auto;margin:4px 0}
+.msg pre code{background:transparent;padding:0}
+.msg a{text-decoration:underline;text-underline-offset:2px}
+.msg strong{font-weight:600}
+.msg ul,.msg ol{padding-left:18px;margin:2px 0}
+.msg li{margin:2px 0}
+
+.input-area{
+  padding:10px 18px 14px;border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;
+}
+textarea{
+  flex:1;padding:10px 14px;border:1px solid rgba(0,0,0,0.08);
+  border-radius:14px;font-family:inherit;font-size:13px;font-weight:400;
+  color:var(--dark-text);background:#fff;outline:none;resize:none;
+  transition:border-color .2s,box-shadow .2s;
+  min-height:40px;max-height:120px;line-height:1.45;
+}
+textarea::placeholder{color:var(--placeholder)}
+textarea:focus{border-color:#c4b896;box-shadow:0 0 0 3px var(--focus)}
+textarea:disabled{opacity:.5}
+.send-btn{
+  width:40px;height:40px;border-radius:12px;border:none;
+  background:var(--send);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,transform .1s,opacity .15s;flex-shrink:0;
+}
+.send-btn:hover:not(:disabled){background:var(--send-hover)}
+.send-btn:active:not(:disabled){transform:scale(.94)}
+.send-btn:disabled{opacity:.25;cursor:default}
+.send-btn svg{width:17px;height:17px}
+
+.typing{align-self:flex-start;padding:12px 14px;border-radius:15px;border-bottom-left-radius:5px;background:var(--cool-asst);display:flex;gap:4px}
+.typing span{width:5px;height:5px;border-radius:50%;background:#b0b8c4;animation:bounce 1.4s ease-in-out infinite}
+.typing span:nth-child(2){animation-delay:.18s}
+.typing span:nth-child(3){animation-delay:.36s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);background:#8b94a0}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="sidebar" id="sidebar">
+  <div><div class="sec-title">知识源</div><div id="src-list"></div></div>
+  <div><div class="sec-title">搜索</div><div class="settings-box">
+    <div class="set-row"><span>优先级</span><span class="set-val"><select id="priority"><option value="dir-first">目录优先</option><option value="json-first">JSON优先</option></select></span></div>
+    <div class="set-row"><span>最大块数</span><span class="set-val"><select id="max-chunks"><option>3</option><option selected>5</option><option>8</option><option>10</option></select></span></div>
+    <div class="set-row"><span>索引时间</span><span class="set-val" id="index-time">—</span></div>
+  </div></div>
+  <div style="margin-top:auto"><div class="sec-title">记忆</div><div class="mem-box">
+    <div class="mem-stat" id="mem-count">0 条记忆</div>
+    <div class="mem-sub" id="mem-distill">—</div>
+    <div class="btn-row"><button class="btn" id="btn-distill">蒸馏</button><button class="btn" id="btn-export">导出</button></div>
+  </div></div>
+</div>
+<div class="chat">
+  <div class="chat-header"><div><h1>知识问答助手</h1><p id="subtitle">基于知识库回答，不编造</p></div><div class="status"><span class="status-dot yellow" id="status-dot"></span><span id="status-label">Mock</span></div></div>
+  <div class="messages" id="messages"></div>
+  <div class="input-area"><textarea id="input" placeholder="输入你的问题..." rows="1"></textarea><button class="send-btn" id="send-btn" disabled><svg viewBox="0 0 24 24" fill="none" stroke="#f8f5f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg></button></div>
+</div></div>
+
+<script>
+const MOCK_RESPONSES=[
+  "根据知识库中的信息，这个问题涉及多个方面...[Source: forward/deploy.md##Overview]\n[Confidence: medium]",
+  "我在知识库中找到了相关记录。[Source: capsule/errors.md##Timeout]\n[Confidence: high]",
+  "目前知识库中没有这方面的详细信息。建议查阅部署指南或联系管理员更新知识库。",
+  "根据多个知识源的综合分析，这个问题的解决方案是...[Source: forward/api.md##Config]\n[Source: reverse/deps.md##CallChain]\n[Confidence: high]",
+];
+const state={
+  messages:[],provider:null,config:null,status:'mock',statusLabel:'Mock',nextId:0,
+  knowledgeSources:[],knowledgeIndex:null,knowledgeOffset:0,
+  memory:{entries:[],lastDistill:null}
+};
+const el={};
+['messages','input','sendBtn','statusDot','statusLabel','subtitle','src-list','index-time','mem-count','mem-distill'].forEach(id=>el[id]=document.getElementById(id));
+
+/* ===== Utility ===== */
+function now(){return new Date().toISOString().replace('T',' ').slice(0,19)}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+/* ===== Markdown ===== */
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function inlineMd(s){return s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')}
+function renderMarkdown(text){let h=escapeHtml(text);h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,lang,code){return '<pre><code>'+code.trim()+'</code></pre>'});var blocks=[],cur='',inList=null,lines=h.split('\n');for(var i=0;i<=lines.length;i++){var line=i<lines.length?lines[i]:'',t=line.trim();if(t===''){if(inList){blocks.push('</'+inList+'>');inList=null;}if(cur){blocks.push('<p>'+inlineMd(cur.trim())+'</p>');cur='';}continue;}var ul=t.match(/^[-*]\s+(.+)/);if(ul){if(inList!=='ul'){if(inList)blocks.push('</'+inList+'>');blocks.push('<ul>');inList='ul';}blocks.push('<li>'+inlineMd(ul[1])+'</li>');continue;}var ol=t.match(/^\d+\.\s+(.+)/);if(ol){if(inList!=='ol'){if(inList)blocks.push('</'+inList+'>');blocks.push('<ol>');inList='ol';}blocks.push('<li>'+inlineMd(ol[1])+'</li>');continue;}if(inList){blocks.push('</'+inList+'>');inList=null;}if(cur)cur+='\n';cur+=line;}if(cur)blocks.push('<p>'+inlineMd(cur)+'</p>');return blocks.join('')}
+
+/* ===== Render ===== */
+function scrollBottom(){el.messages.scrollTop=el.messages.scrollHeight}
+function renderChat(){el.messages.innerHTML='';for(const m of state.messages){if(m.role==='system')continue;const d=document.createElement('div');d.className='msg '+m.role;let content=renderMarkdown(m.content);d.innerHTML='<div class="label">'+(m.role==='user'?'我':'助手')+'</div><div>'+content+'</div>';el.messages.appendChild(d)}scrollBottom()}
+function showTyping(v){const e=el.messages.querySelector('.typing');if(v&&!e){const d=document.createElement('div');d.className='typing';d.innerHTML='<span></span><span></span><span></span>';el.messages.appendChild(d);scrollBottom()}else if(!v&&e)e.remove()}
+function updateStatus(s,l){state.status=s;state.statusLabel=l;el.statusDot.className='status-dot '+s;el.statusLabel.textContent=l;el.subtitle.textContent=s==='connected'?'已连接知识库 · 不编造':'Mock模式 · 无LLM连接'}
+function disableInput(d){el.input.disabled=d;el.sendBtn.disabled=d||!el.input.value.trim()}
+
+/* ===== Sidebar ===== */
+function renderSidebar(){
+  el['src-list'].innerHTML=state.knowledgeSources.map((s,i)=>{
+    const dot=s.enabled?'green':'red';
+    const count=s.fileCount!==undefined?s.fileCount+'文件':'—';
+    return '<div class="src-item'+(s.enabled?'':' disabled')+'" onclick="toggleSource('+i+')"><span class="src-dot '+dot+'"></span>'+escapeHtml(s.name)+'<span class="src-meta">'+count+'</span></div>';
+  }).join('')+'<div class="add-btn" onclick="addSource()">+ 添加知识源</div>';
+  const idx=state.knowledgeIndex;
+  if(idx&&idx.built)el['index-time'].textContent=idx.built.slice(11,16);
+  el['mem-count'].textContent=state.memory.entries.length+' 条记忆';
+  el['mem-distill'].textContent=state.memory.lastDistill?'上次蒸馏 · '+state.memory.lastDistill:'未蒸馏';
+}
+function toggleSource(i){state.knowledgeSources[i].enabled=!state.knowledgeSources[i].enabled;renderSidebar();saveConfig()}
+function addSource(){
+  const name=prompt('知识源名称（如：团队文档）');if(!name)return;
+  const path=prompt('路径（如：agent/knowledge/forward/）');if(!path)return;
+  state.knowledgeSources.push({name,type:'local-dir',path,format:'markdown',enabled:true,description:''});
+  renderSidebar();saveConfig();
+}
+
+/* ===== Index Search ===== */
+function tokenize(text){
+  const tokens=[];
+  const words=text.toLowerCase().split(/[\s,.;:!?\"'()\[\]{}<>/\\|`~@#$%^&*+=_-]+/);
+  for(const w of words){if(w.length>=2)tokens.push(w)}
+  const cjk=text.match(/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]{1}/g);
+  if(cjk){for(let i=0;i<cjk.length;i++){tokens.push(cjk[i]);if(i+1<cjk.length)tokens.push(cjk[i]+cjk[i+1])}}
+  return tokens;
+}
+function searchKnowledge(query){
+  if(!state.knowledgeIndex||!state.knowledgeIndex.inverted)return[];
+  const tokens=tokenize(query);
+  const scores={},inv=state.knowledgeIndex.inverted;
+  for(const t of tokens){if(!inv[t])continue;for(const e of inv[t]){const k=e.source+'#'+e.section;scores[k]=(scores[k]||0)+e.tf}}
+  return Object.entries(scores).sort((a,b)=>b[1]-a[1]).slice(0,parseInt(el['max-chunks'].value||5));
+}
+
+/* ===== Message Handling ===== */
+async function handleSend(text){
+  disableInput(true);showTyping(true);
+  try{
+    if(state.config){await streamResponse(text)}else{await mockResponse()}
+    if(state.config)maybeDistill();
+  }catch(err){console.error(err);state.messages.push({id:String(state.nextId++),role:'assistant',content:'抱歉，请求失败，请重试。',timestamp:now()})}
+  finally{showTyping(false);disableInput(false);el.input.focus();renderChat()}
+}
+async function mockResponse(){
+  await sleep(300+Math.random()*1200);
+  state.messages.push({id:String(state.nextId++),role:'assistant',content:MOCK_RESPONSES[Math.floor(Math.random()*MOCK_RESPONSES.length)],timestamp:now()});
+}
+async function streamResponse(text){
+  const chunks=searchKnowledge(text);
+  let knowledgeCtx='';
+  for(const c of chunks){
+    const [src,section]=c[0].split('#',2);
+    const info=state.knowledgeIndex.sources[src];
+    if(!info||!info.sections[section])continue;
+    knowledgeCtx+='[Knowledge: '+src+'#'+section+']\n'+info.sections[section].preview+'\n\n';
+  }
+  const cfg=state.config.llm;
+  const msgs=state.messages.map(m=>({role:m.role,content:m.content}));
+  if(knowledgeCtx)msgs.unshift({role:'system',content:'[Knowledge Context for this query]\n'+knowledgeCtx});
+  const aid=String(state.nextId++);
+  const idx=state.messages.push({id:aid,role:'assistant',content:'',timestamp:now()})-1;
+  if(cfg.provider==='anthropic'){await streamAnthropic(cfg,msgs,idx)}
+  else{await streamOpenAI(cfg,msgs,idx)}
+}
+async function streamOpenAI(cfg,messages,idx){const res=await fetch(cfg.baseURL.replace(/\/$/,'')+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+cfg.apiKey},body:JSON.stringify({model:cfg.model,messages,temperature:cfg.options?.temperature??0.7,max_tokens:cfg.options?.maxTokens??4096,stream:true})});if(!res.ok)throw new Error('API error '+res.status);await parseOpenAISSE(res.body.getReader(),idx)}
+async function streamAnthropic(cfg,messages,idx){const sys=[];const chat=[];for(const m of messages){if(m.role==='system')sys.push(m.content);else chat.push({role:m.role,content:m.content})}const body={model:cfg.model,messages:chat,max_tokens:cfg.options?.maxTokens??4096,stream:true};if(sys.length)body.system=sys.join('\n\n');if(cfg.options?.temperature!=null)body.temperature=cfg.options.temperature;const res=await fetch(cfg.baseURL.replace(/\/$/,'')+'/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify(body)});if(!res.ok)throw new Error('API error '+res.status);await parseAnthropicSSE(res.body.getReader(),idx)}
+async function parseOpenAISSE(r,idx){const d=new TextDecoder();let b='';while(true){const{value,done}=await r.read();if(done)break;b+=d.decode(value,{stream:true});const lines=b.split('\n');b=lines.pop()||'';for(const l of lines){if(!l.trim()||!l.startsWith('data: '))continue;const data=l.slice(6);if(data==='[DONE]')return;try{const c=JSON.parse(data)?.choices?.[0]?.delta?.content;if(c)state.messages[idx].content+=c;renderChat()}catch{}}}}
+async function parseAnthropicSSE(r,idx){const d=new TextDecoder();let b='',ev='';while(true){const{value,done}=await r.read();if(done)break;b+=d.decode(value,{stream:true});const lines=b.split('\n');b=lines.pop()||'';for(const l of lines){const t=l.trim();if(t.startsWith('event: ')){ev=t.slice(7);continue}if(!t.startsWith('data: '))continue;if(ev==='content_block_delta'){try{const dd=JSON.parse(t.slice(6));if(dd.delta?.text)state.messages[idx].content+=dd.delta.text;renderChat()}catch{}}ev=''}}}
+
+/* ===== Memory ===== */
+function loadMemory(){
+  try{const m=localStorage.getItem('qna-memory');if(m)state.memory=JSON.parse(m)}
+  catch{}if(!state.memory.entries)state.memory={entries:[],lastDistill:null}
+}
+function saveMemory(){localStorage.setItem('qna-memory',JSON.stringify(state.memory));renderSidebar()}
+let distillTimer=null;
+function maybeDistill(){clearTimeout(distillTimer);distillTimer=setTimeout(()=>{if(state.messages.length>2)distillMemory()},30000)}
+async function distillMemory(){
+  const recent=state.messages.slice(-10).filter(m=>m.role!=='system');
+  if(!recent.length)return;
+  const entry={id:'mem-'+now().replace(/[: ]/g,'-').slice(2,17)+'-'+(state.memory.entries.length+1).toString().padStart(3,'0'),type:'learning',tags:[],content:recent.map(m=>{const label=m.role==='user'?'Q':'A';return label+': '+m.content.slice(0,80)}).join(' | '),sources:['session-'+now().slice(0,10)],confidence:'medium',created:now(),updated:now(),access_count:1,stale:false};
+  state.memory.entries.push(entry);
+  state.memory.lastDistill=now().slice(11,16);
+  saveMemory();
+}
+function exportMemory(){
+  const blob=new Blob([JSON.stringify(state.memory,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='persistent.json';a.click();
+}
+
+/* ===== Config ===== */
+async function saveConfig(){
+  try{await fetch('/knowledge-sources.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({sources:state.knowledgeSources,priority:el['priority'].value,search:{max_chunks:parseInt(el['max-chunks'].value)}})})}catch(e){console.error('Config save failed:',e)}
+}
+
+/* ===== Input ===== */
+el.input.addEventListener('input',()=>{el.input.style.height='auto';el.input.style.height=Math.min(el.input.scrollHeight,120)+'px';el.sendBtn.disabled=!el.input.value.trim()||el.input.disabled})
+el.input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}})
+el.sendBtn.addEventListener('click',send);
+function send(){const text=el.input.value.trim();if(!text)return;el.input.value='';el.input.style.height='auto';el.sendBtn.disabled=true;state.messages.push({id:String(state.nextId++),role:'user',content:text,timestamp:now()});renderChat();handleSend(text)}
+
+/* ===== Init ===== */
+async function init(){
+  loadMemory();
+  let configLoaded=false;
+  try{
+    const r=await fetch('/ake.json');
+    if(r.ok){const cfg=await r.json();if(cfg.llm&&cfg.llm.provider&&cfg.llm.apiKey&&cfg.llm.baseURL&&cfg.llm.model){if(!['<PLACEHOLDER>',''].includes(cfg.llm.apiKey)&&!['<PLACEHOLDER>',''].includes(cfg.llm.baseURL)&&!['<PLACEHOLDER>',''].includes(cfg.llm.model)){state.config=cfg;configLoaded=true}}}
+  }catch{}
+  try{
+    const r=await fetch('/knowledge-index.json');
+    if(r.ok){state.knowledgeIndex=await r.json()}
+  }catch{console.warn('Index not found, falling back to keyword search')}
+  try{
+    const r=await fetch('/knowledge-sources.json');
+    if(r.ok){const s=await r.json();if(s.sources)state.knowledgeSources=s.sources;if(s.priority)el['priority'].value=s.priority;if(s.search?.max_chunks)el['max-chunks'].value=String(s.search.max_chunks)}
+  }catch{}
+  if(configLoaded){updateStatus('connected',cfgLabel())}else{updateStatus('mock','Mock')}
+  await loadSkills();
+  const greeting=state.config?'你好！我是知识问答助手。我可以基于知识库回答你的问题。请问有什么可以帮助你的？':'你好！我是知识问答助手（Mock模式）。请配置 ake.json 后刷新页面连接 LLM。';
+  state.messages.push({id:String(state.nextId++),role:'assistant',content:greeting,timestamp:now()});
+  renderSidebar();renderChat();
+  document.getElementById('priority').onchange=()=>saveConfig();
+  document.getElementById('max-chunks').onchange=()=>saveConfig();
+  document.getElementById('btn-distill').onclick=()=>{distillMemory();alert('记忆已蒸馏')};
+  document.getElementById('btn-export').onclick=exportMemory;
+}
+function cfgLabel(){const c=state.config.llm;return(c.provider==='anthropic'?'Anthropic':'OpenAI')+' · '+c.model}
+async function loadSkills(){
+  const names=state.config?.skills?.autoload||['qna-orchestrator','knowledge-retrieval','memory-curation'];
+  for(const name of names){
+    try{const r=await fetch('/agent/skill/'+name+'/SKILL.md');if(r.ok){const content=await r.text();state.messages.push({id:'skill-'+state.nextId++,role:'system',content:'[Skill: '+name+']\n\n'+content,timestamp:now()})}}catch{}
+  }
+}
+init();
+</script>
+</body>
+</html>
