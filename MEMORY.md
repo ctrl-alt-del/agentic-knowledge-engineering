@@ -32,10 +32,10 @@
 
 ## Architecture Decisions
 <!-- ADRs made during spec-driven development -->
-- ADR-001: Specs in specs/ separate from docs/ (permanent reference vs per-feature artifacts)
-- ADR-002: `LlmProvider` as abstract TypeScript interface in `ui/src/lib/`. Future LLM integrations implement this interface. UI components never change.
+- ADR-001: Specs per feature in `features/<feature>/specs/`. `specs/SDD.md` and `specs/_template/` are project-wide scaffolding.
+- ADR-002: `LlmProvider` as abstract TypeScript interface in feature's `ui/src/lib/`. Future LLM integrations implement this interface. UI components never change.
 - ADR-003: Vue 3 `provide/inject` for dependency injection of providers. No prop drilling. Works at any component depth.
-- ADR-004: Skills live in `skill/` directory. Each skill follows Skill Creator workflow: draft → eval → iterate. Skills are loaded by the remote LLM through the `LlmProvider` interface.
+- ADR-004: Skills live in `features/<feature>/skill/`. Each skill follows Skill Creator workflow: draft → eval → iterate. Skills are loaded by the remote LLM through the `LlmProvider` interface.
 - ADR-005: MCP/API configurations for skills use placeholders in `references/config.md`. No hardcoded endpoints. Deployers replace placeholders with real values.
 - ADR-006: Project-level LLM configuration in `ake.json` (gitignored), with `ake.example.json` as committed template. Uses provider factory pattern to create the right `LlmProvider` at runtime without code changes.
 - ADR-007: Zero-SDK-dependency API integration. Both OpenAI and Anthropic APIs are accessed via plain `fetch()`, avoiding npm packages like `@anthropic-ai/sdk` and `openai`. SSE stream parsing is handled manually per protocol.
@@ -44,34 +44,34 @@
 
 | File | Touched By | Why |
 |------|-----------|-----|
-| `ui/src/lib/llmProvider.ts` | 001-chat-ui | Core abstraction for AI backends |
-| `ui/src/lib/mockResponder.ts` | 001-chat-ui | Demo responder, replaced by real LLM later |
-| `ui/src/lib/types.ts` | 001-chat-ui | Shared Message type |
-| `ui/src/components/ChatContainer.vue` | 001-chat-ui | Main chat orchestration |
-| `ui/src/components/MessageList.vue` | 001-chat-ui | Scrollable message display |
-| `ui/src/components/MessageBubble.vue` | 001-chat-ui | Single message rendering |
-| `ui/src/components/ChatInput.vue` | 001-chat-ui | Text input + send |
-| `ui/src/App.vue` | 001-chat-ui | Provider wiring |
-| `skill/project-initializer/SKILL.md` | 002-project-initializer-skill | Main skill: 7-phase conversation flow |
-| `skill/project-initializer/references/form-fields.md` | 002-project-initializer-skill | Field definitions + constraints |
-| `skill/project-initializer/references/config.md` | 002-project-initializer-skill | MCP endpoint placeholders |
-| `skill/project-initializer/references/output-schema.json` | 002-project-initializer-skill | JSON output schema |
-| `skill/project-initializer/assets/state-schema.json` | 002-project-initializer-skill | Resume state schema |
-| `skill/project-initializer/evals/evals.json` | 002-project-initializer-skill | Test cases + assertions |
-| `skill/project-initializer/evals/grade.py` | 002-project-initializer-skill | Auto-grading script |
+| `features/init-chat/ui/src/lib/llmProvider.ts` | 001-chat-ui | Core abstraction for AI backends |
+| `features/init-chat/ui/src/lib/mockResponder.ts` | 001-chat-ui | Demo responder, replaced by real LLM later |
+| `features/init-chat/ui/src/lib/types.ts` | 001-chat-ui | Shared Message type |
+| `features/init-chat/ui/src/components/ChatContainer.vue` | 001-chat-ui | Main chat orchestration |
+| `features/init-chat/ui/src/components/MessageList.vue` | 001-chat-ui | Scrollable message display |
+| `features/init-chat/ui/src/components/MessageBubble.vue` | 001-chat-ui | Single message rendering |
+| `features/init-chat/ui/src/components/ChatInput.vue` | 001-chat-ui | Text input + send |
+| `features/init-chat/ui/src/App.vue` | 001-chat-ui | Provider wiring |
+| `features/init-chat/skill/project-initializer/SKILL.md` | 002-project-initializer-skill | Main skill: 7-phase conversation flow |
+| `features/init-chat/skill/project-initializer/references/form-fields.md` | 002-project-initializer-skill | Field definitions + constraints |
+| `features/init-chat/skill/project-initializer/references/config.md` | 002-project-initializer-skill | MCP endpoint placeholders |
+| `features/init-chat/skill/project-initializer/references/output-schema.json` | 002-project-initializer-skill | JSON output schema |
+| `features/init-chat/skill/project-initializer/assets/state-schema.json` | 002-project-initializer-skill | Resume state schema |
+| `features/init-chat/skill/project-initializer/evals/evals.json` | 002-project-initializer-skill | Test cases + assertions |
+| `features/init-chat/skill/project-initializer/evals/grade.py` | 002-project-initializer-skill | Auto-grading script |
 | `ake.example.json` | 003-llm-api-config | Config template (committed) |
 | `ake.schema.json` | 003-llm-api-config | Config validation schema |
-| `ui/src/lib/config.ts` | 003-llm-api-config | Config loader + types |
-| `ui/src/lib/openAiProvider.ts` | 003-llm-api-config | OpenAI-compatible provider |
-| `ui/src/lib/anthropicProvider.ts` | 003-llm-api-config | Anthropic provider |
-| `ui/src/lib/skillLoader.ts` | 003-llm-api-config | Skill loading from paths |
-| `ui/src/components/ConfigStatus.vue` | 003-llm-api-config | Connection status indicator |
-| `ui/src/App.vue` | 001-chat-ui, 003-llm-api-config | Provider wiring + skill loading |
-| `ui/src/lib/llmProvider.ts` | 001-chat-ui, 003-llm-api-config | Core abstraction (updated: streaming + messages array) |
-| `ui/src/lib/types.ts` | 001-chat-ui, 003-llm-api-config | Shared Message type (updated: system role) |
-| `ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy | Zero-dependency demo: pure HTML/CSS/JS chat UI |
-| `ui/src/lib/markdown.ts` | 004-chat-markdown-copy | Zero-dependency markdown parser |
-| `ui/src/components/MessageBubble.vue` | 001-chat-ui, 004-chat-markdown-copy | Single message rendering (updated: markdown, copy, timestamp) |
+| `features/init-chat/ui/src/lib/config.ts` | 003-llm-api-config | Config loader + types |
+| `features/init-chat/ui/src/lib/openAiProvider.ts` | 003-llm-api-config | OpenAI-compatible provider |
+| `features/init-chat/ui/src/lib/anthropicProvider.ts` | 003-llm-api-config | Anthropic provider |
+| `features/init-chat/ui/src/lib/skillLoader.ts` | 003-llm-api-config | Skill loading from paths |
+| `features/init-chat/ui/src/components/ConfigStatus.vue` | 003-llm-api-config | Connection status indicator |
+| `features/init-chat/ui/src/App.vue` | 001-chat-ui, 003-llm-api-config | Provider wiring + skill loading |
+| `features/init-chat/ui/src/lib/llmProvider.ts` | 001-chat-ui, 003-llm-api-config | Core abstraction (updated: streaming + messages array) |
+| `features/init-chat/ui/src/lib/types.ts` | 001-chat-ui, 003-llm-api-config | Shared Message type (updated: system role) |
+| `features/init-chat/ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy | Zero-dependency demo: pure HTML/CSS/JS chat UI |
+| `features/init-chat/ui/src/lib/markdown.ts` | 004-chat-markdown-copy | Zero-dependency markdown parser |
+| `features/init-chat/ui/src/components/MessageBubble.vue` | 001-chat-ui, 004-chat-markdown-copy | Single message rendering (updated: markdown, copy, timestamp) |
 
 ## Common Bugs Fixed
 

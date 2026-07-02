@@ -8,21 +8,21 @@
 ## Block 1: 技能文件
 
 - [ ] **Task 1.1**: 编写 SKILL.md + references + assets
-  - 文件: `skill/project-initializer/SKILL.md`, `references/form-fields.md`, `references/config.md`, `references/output-schema.json`, `assets/state-schema.json`
+  - 文件: `features/init-chat/skill/project-initializer/SKILL.md`, `references/form-fields.md`, `references/config.md`, `references/output-schema.json`, `assets/state-schema.json`
   - 构建: 验证文件存在性（`ls skill/project-initializer/`）
   - 测试: `npm test`（验证 schema JSON 合法性）
 
 ## Block 2: 评估定义
 
 - [ ] **Task 2.1**: 创建 evals/evals.json（4 个测试用例 + 9 个断言）
-  - 文件: `skill/project-initializer/evals/evals.json`
+  - 文件: `features/init-chat/skill/project-initializer/evals/evals.json`
   - 构建: 验证 JSON 合法性
   - 测试: `npm test`
 
 ## Block 3: 评估运行
 
 - [ ] **Task 3.1**: 并行运行 8 个子代理（4 with skill + 4 without skill）
-  - 输出: `skill/project-initializer-workspace/iteration-1/`
+  - 输出: `features/init-chat/skill/project-initializer-workspace/iteration-1/`
   - 构建: 所有子代理完成
   - 测试: 检查每个输出目录存在 timing.json
 
@@ -34,7 +34,7 @@
 ## Block 4: 迭代
 
 - [ ] **Task 4.1**: 根据评估反馈优化技能
-  - 文件: `skill/project-initializer/SKILL.md`（优化版）
+  - 文件: `features/init-chat/skill/project-initializer/SKILL.md`（优化版）
   - 构建: 验证文件存在
   - 测试: 重新运行评估（通过率提升）
 

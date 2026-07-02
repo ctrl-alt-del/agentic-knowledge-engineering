@@ -3,7 +3,7 @@
 ## SDD 单元测试
 
 ### SKILL.md 结构验证
-- [ ] **文件存在**：`skill/project-initializer/SKILL.md` 存在且包含 YAML frontmatter（name, description）
+- [ ] **文件存在**：`features/init-chat/skill/project-initializer/SKILL.md` 存在且包含 YAML frontmatter（name, description）
 - [ ] **必需引用文件存在**：所有 `references/` 和 `assets/` 引用的文件均在磁盘
 
 ### output-schema.json 验证

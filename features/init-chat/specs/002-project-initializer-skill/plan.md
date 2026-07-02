@@ -31,12 +31,12 @@ created: "2026-06-30"
 
 | 操作 | 文件 | 原因 |
 |------|------|------|
-| 创建 | `skill/project-initializer/SKILL.md` | 主技能：7 阶段对话流程 |
-| 创建 | `skill/project-initializer/references/form-fields.md` | 字段定义、约束、枚举 |
-| 创建 | `skill/project-initializer/references/config.md` | MCP/API 可配置架构 |
-| 创建 | `skill/project-initializer/references/output-schema.json` | 输出 JSON Schema |
-| 创建 | `skill/project-initializer/assets/state-schema.json` | 断点续填状态 |
-| 创建 | `skill/project-initializer/evals/evals.json` | 测试用例和断言 |
+| 创建 | `features/init-chat/skill/project-initializer/SKILL.md` | 主技能：7 阶段对话流程 |
+| 创建 | `features/init-chat/skill/project-initializer/references/form-fields.md` | 字段定义、约束、枚举 |
+| 创建 | `features/init-chat/skill/project-initializer/references/config.md` | MCP/API 可配置架构 |
+| 创建 | `features/init-chat/skill/project-initializer/references/output-schema.json` | 输出 JSON Schema |
+| 创建 | `features/init-chat/skill/project-initializer/assets/state-schema.json` | 断点续填状态 |
+| 创建 | `features/init-chat/skill/project-initializer/evals/evals.json` | 测试用例和断言 |
 
 ## 风险
 

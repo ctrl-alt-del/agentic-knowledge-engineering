@@ -45,15 +45,15 @@ created: "2026-06-30"
 
 | Action | File | Rationale |
 |--------|------|-----------|
-| Create | `ui/` — full Vite + Vue 3 + TS + Tailwind scaffold | Project bootstrap |
-| Create | `ui/src/lib/llmProvider.ts` | Abstract interface for any AI backend |
-| Create | `ui/src/lib/mockResponder.ts` | Random answers with delay for demo |
-| Create | `ui/src/lib/types.ts` | Shared Message type |
-| Create | `ui/src/components/MessageBubble.vue` | Reusable message display |
-| Create | `ui/src/components/MessageList.vue` | Scrollable list with auto-scroll |
-| Create | `ui/src/components/ChatInput.vue` | Text input + send affordance |
-| Create | `ui/src/components/ChatContainer.vue` | Layout shell wiring components |
-| Create | `ui/src/App.vue` | Root: provides LlmProvider, mounts ChatContainer |
+| Create | `features/init-chat/ui/` — full Vite + Vue 3 + TS + Tailwind scaffold | Project bootstrap |
+| Create | `features/init-chat/ui/src/lib/llmProvider.ts` | Abstract interface for any AI backend |
+| Create | `features/init-chat/ui/src/lib/mockResponder.ts` | Random answers with delay for demo |
+| Create | `features/init-chat/ui/src/lib/types.ts` | Shared Message type |
+| Create | `features/init-chat/ui/src/components/MessageBubble.vue` | Reusable message display |
+| Create | `features/init-chat/ui/src/components/MessageList.vue` | Scrollable list with auto-scroll |
+| Create | `features/init-chat/ui/src/components/ChatInput.vue` | Text input + send affordance |
+| Create | `features/init-chat/ui/src/components/ChatContainer.vue` | Layout shell wiring components |
+| Create | `features/init-chat/ui/src/App.vue` | Root: provides LlmProvider, mounts ChatContainer |
 | Create | `README.md` | Project overview, setup, tech stack |
 
 ## Risks

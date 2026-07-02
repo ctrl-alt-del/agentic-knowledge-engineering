@@ -13,14 +13,14 @@ cp ake.example.json ake.json
 # Edit ake.json with your API credentials (provider, apiKey, baseURL, model)
 
 # 2. Option A: Vue dev server (requires npm)
-cd ui
+cd features/init-chat/ui
 npm install
 npm run dev    # start dev server
 npm test       # run tests
 
 # 2. Option B: Zero-dependency demo (no npm needed)
 python3 -m http.server 8000
-# Open http://localhost:8000/ui_lite/
+# Open http://localhost:8000/features/init-chat/ui_lite/
 ```
 
 ## Project Structure
@@ -28,15 +28,15 @@ python3 -m http.server 8000
 ```
 ├── ake.example.json   # LLM API config template (copy to ake.json)
 ├── ake.schema.json    # Config JSON Schema
-├── skill/             # opencode skills (loaded by LLM via LlmProvider)
-│   └── project-initializer/    # 项目初始化助手技能
-├── ui/                # Vue 3 frontend (requires npm)
-├── ui_lite/           # Zero-dependency demo (markdown, copy, timestamps)
-│   └── index.html     #   open in browser or serve with any HTTP server
-├── specs/             # feature specifications (SDD workflow)
-│   ├── 001-chat-ui/
-│   ├── 002-project-initializer-skill/
-│   └── 003-llm-api-config/
+├── features/          # feature modules (each with ui, skill, specs)
+│   └── init-chat/     # chatbot for project initialization
+│       ├── ui/        #   Vue 3 frontend (requires npm)
+│       ├── ui_lite/   #   Zero-dependency demo
+│       ├── skill/     #   project-initializer skill
+│       └── specs/     #   feature specifications (001-004)
+├── specs/             # SDD workflow + template
+│   ├── SDD.md
+│   └── _template/
 ├── MEMORY.md          # accumulated project knowledge
 └── AGENTS.md          # AI workflow conventions
 ```
@@ -59,7 +59,7 @@ Copy the template and fill in your LLM API details:
     }
   },
   "skills": {
-    "paths": ["skill/"],
+    "paths": ["features/init-chat/skill/"],
     "autoload": ["project-initializer"]
   }
 }

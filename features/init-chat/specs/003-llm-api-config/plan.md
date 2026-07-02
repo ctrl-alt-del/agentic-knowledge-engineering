@@ -50,16 +50,16 @@ created: "2026-07-01"
 | 创建 | `ake.example.json` | 配置模板 |
 | 创建 | `ake.schema.json` | 配置 JSON Schema |
 | 变更 | `.gitignore` | 添加 `ake.json` |
-| 创建 | `ui/src/lib/config.ts` | 配置加载器和类型 |
-| 变更 | `ui/src/lib/llmProvider.ts` | 接口升级（messages + streaming） |
-| 变更 | `ui/src/lib/types.ts` | Message.role 增加 "system" |
-| 变更 | `ui/src/lib/mockResponder.ts` | 适配新接口 |
-| 创建 | `ui/src/lib/openAiProvider.ts` | OpenAI 兼容 provider |
-| 创建 | `ui/src/lib/anthropicProvider.ts` | Anthropic provider |
-| 创建 | `ui/src/lib/skillLoader.ts` | 技能加载器 |
-| 创建 | `ui/src/components/ConfigStatus.vue` | 连接状态指示器 |
-| 变更 | `ui/src/components/ChatContainer.vue` | 适配新接口 + 流式支持 |
-| 变更 | `ui/src/App.vue` | 配置驱动 provider 创建 |
+| 创建 | `features/init-chat/ui/src/lib/config.ts` | 配置加载器和类型 |
+| 变更 | `features/init-chat/ui/src/lib/llmProvider.ts` | 接口升级（messages + streaming） |
+| 变更 | `features/init-chat/ui/src/lib/types.ts` | Message.role 增加 "system" |
+| 变更 | `features/init-chat/ui/src/lib/mockResponder.ts` | 适配新接口 |
+| 创建 | `features/init-chat/ui/src/lib/openAiProvider.ts` | OpenAI 兼容 provider |
+| 创建 | `features/init-chat/ui/src/lib/anthropicProvider.ts` | Anthropic provider |
+| 创建 | `features/init-chat/ui/src/lib/skillLoader.ts` | 技能加载器 |
+| 创建 | `features/init-chat/ui/src/components/ConfigStatus.vue` | 连接状态指示器 |
+| 变更 | `features/init-chat/ui/src/components/ChatContainer.vue` | 适配新接口 + 流式支持 |
+| 变更 | `features/init-chat/ui/src/App.vue` | 配置驱动 provider 创建 |
 
 ## 风险
 

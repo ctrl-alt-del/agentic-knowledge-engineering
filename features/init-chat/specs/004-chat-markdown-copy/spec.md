@@ -29,8 +29,8 @@
 - [ ] 字号 10px，颜色 muted
 
 ## 适用范围
-- [ ] Vue 应用（`ui/`）的所有消息气泡
-- [ ] Demo（`ui_lite/index.html`）的所有消息气泡
+- [ ] Vue 应用（`features/init-chat/ui/`）的所有消息气泡
+- [ ] Demo（`features/init-chat/ui_lite/index.html`）的所有消息气泡
 
 ## 验收标准
 

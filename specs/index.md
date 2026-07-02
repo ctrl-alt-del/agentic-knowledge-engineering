@@ -4,11 +4,11 @@ last_updated: "2026-07-01"
 
 # Feature Index
 
-| ID | Feature | Status | Touches | Depends On |
-|----|---------|--------|---------|------------|
-| 001 | Chat UI | ✅ Done | `ui/src/**`, `README.md` | — |
-| 002 | 项目初始化助手技能 | ✅ Done | `skill/project-initializer/**`, `README.md`, `AGENTS.md`, `MEMORY.md` | 001-chat-ui |
-| 003 | LLM API 配置 | ✅ Done | `ake.example.json`, `ui/src/lib/**`, `ui/src/App.vue`, `README.md`, `AGENTS.md`, `MEMORY.md`, `.gitignore` | 001-chat-ui, 002-project-initializer-skill |
-| 004 | Chat Markdown + Copy | ✅ Done | `ui/src/lib/markdown.ts`, `ui/src/lib/types.ts`, `ui/src/components/MessageBubble.vue`, `ui/src/components/MessageList.vue`, `ui/src/App.vue`, `ui_lite/index.html`, `README.md`, `MEMORY.md` | 001-chat-ui, 003-llm-api-config |
+| ID | Feature | Location | Status | Touches |
+|----|---------|----------|--------|---------|
+| 001 | Chat UI | `features/init-chat/specs/001-chat-ui/` | Done | `features/init-chat/ui/src/**` |
+| 002 | 项目初始化助手技能 | `features/init-chat/specs/002-project-initializer-skill/` | Done | `features/init-chat/skill/**` |
+| 003 | LLM API 配置 | `features/init-chat/specs/003-llm-api-config/` | Done | `ake.example.json`, `features/init-chat/ui/src/lib/**` |
+| 004 | Chat Markdown + Copy | `features/init-chat/specs/004-chat-markdown-copy/` | Done | `features/init-chat/ui/src/**`, `features/init-chat/ui_lite/index.html` |
 
 Status: 📋 Planned → 🚧 In Progress → ✅ Done → 📦 Archived

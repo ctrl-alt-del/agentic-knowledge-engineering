@@ -12,7 +12,7 @@
     }
   },
   "skills": {
-    "paths": ["skill/"],
+    "paths": ["features/init-chat/skill/"],
     "autoload": ["project-initializer"]
   }
 }

@@ -7,21 +7,21 @@
 ## Block 1: 基础
 
 - [ ] **Task 4.1**: 添加 `timestamp` 到 `Message` 类型 + 创建 markdown 解析器
-  - 文件: `ui/src/lib/types.ts`, `ui/src/lib/markdown.ts`, `ui/src/lib/markdown.test.ts`
+  - 文件: `features/init-chat/ui/src/lib/types.ts`, `features/init-chat/ui/src/lib/markdown.ts`, `features/init-chat/ui/src/lib/markdown.test.ts`
   - 构建: `npm run build`
   - 测试: `npm test`
 
 ## Block 2: Vue 组件
 
 - [ ] **Task 4.2**: 更新 `MessageBubble` + `MessageList` + `ChatContainer` + `App.vue`
-  - 文件: `ui/src/components/MessageBubble.vue` + test, `ui/src/components/MessageList.vue`, `ui/src/components/ChatContainer.vue` + test, `ui/src/App.vue`
+  - 文件: `features/init-chat/ui/src/components/MessageBubble.vue` + test, `features/init-chat/ui/src/components/MessageList.vue`, `features/init-chat/ui/src/components/ChatContainer.vue` + test, `features/init-chat/ui/src/App.vue`
   - 构建: `npm run build`
   - 测试: `npm test`
 
 ## Block 3: Demo
 
-- [ ] **Task 4.3**: 更新 `ui_lite/index.html`（markdown 渲染 + 复制按钮 + 时间戳）
-  - 文件: `ui_lite/index.html`
+- [ ] **Task 4.3**: 更新 `features/init-chat/ui_lite/index.html`（markdown 渲染 + 复制按钮 + 时间戳）
+  - 文件: `features/init-chat/ui_lite/index.html`
   - 构建: 浏览器手动测试
   - 测试: 浏览器手动测试
 

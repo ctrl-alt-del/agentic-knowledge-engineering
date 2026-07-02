@@ -4,15 +4,16 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 
 - **UI**: Vue 3 + TypeScript + Tailwind CSS (Vite)
 - **Testing**: Vitest + @vue/test-utils
-- **Skills**: Open-code skills in `skill/` directory, loaded by LLM via `LlmProvider`
+- **Skills**: Open-code skills per feature in `features/<feature>/skill/` directory, loaded by LLM via `LlmProvider`
 
 ## Project Conventions
 
-- Spec-driven development: all features start in `specs/` before any code
+- Multi-feature structure: each feature lives under `features/<feature>/` with its own `ui/`, `ui_lite/`, `skill/`, and `specs/` subdirectories
+- Spec-driven development: all features start with specs before any code
 - One task = one commit with passing build + tests
-- Skills live in `skill/` directory; each skill follows the Skill Creator workflow (draft → eval → iterate)
+- Skills live in `features/<feature>/skill/`; each skill follows the Skill Creator workflow (draft → eval → iterate)
 - `ake.json` is gitignored; `ake.example.json` is the committed template. Never commit real API keys
-- `ui_lite/` is the zero-dependency demo — single HTML file, no install, served by any HTTP server
+- `specs/SDD.md` for the full workflow; `specs/_template/` for new feature scaffolding
 - See `specs/SDD.md` for the full workflow
 
 ## Triggering Feature Development
@@ -20,8 +21,9 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 When the user describes a new feature (creates, builds, adds, wants a new screen,
 etc.), follow the spec-driven development workflow in `specs/SDD.md`. Read
 `MEMORY.md` before writing any spec to avoid repeating known bugs. The workflow:
-1. Generate mockups if needed (`canvas-design` + `theme-factory`)
-2. Co-author spec + plan (`doc-coauthoring`)
-3. Write test plan and tasks
-4. Implement one commit per task
-5. Write takeaways → promote to `MEMORY.md`
+1. Create the feature folder: `mkdir -p features/<new-feature>/{ui,ui_lite,skill,specs}`
+2. Generate mockups if needed (`canvas-design` + `theme-factory`)
+3. Co-author spec + plan (`doc-coauthoring`)
+4. Write test plan and tasks
+5. Implement one commit per task
+6. Write takeaways → promote to `MEMORY.md`

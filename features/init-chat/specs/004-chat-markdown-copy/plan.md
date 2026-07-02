@@ -30,20 +30,20 @@ created: "2026-07-01"
    Vue 和 Demo 共用相同逻辑（Vue 通过 import，Demo 内联）。
 2. **MessageBubble 扩展**：新增 copy 按钮和时间戳，使用 `v-html` 渲染 markdown 内容。
 3. **Message 类型扩展**：新增 `timestamp` 字段，创建消息时自动生成。
-4. **Demo 同步更新**：`ui_lite/index.html` 内联相同解析器，用 `innerHTML` 渲染。
+4. **Demo 同步更新**：`features/init-chat/ui_lite/index.html` 内联相同解析器，用 `innerHTML` 渲染。
 
 ## 文件创建 / 变更
 
 | 操作 | 文件 | 原因 |
 |------|------|------|
-| 创建 | `ui/src/lib/markdown.ts` | Markdown 解析器（零依赖） |
-| 创建 | `ui/src/lib/markdown.test.ts` | 解析器单元测试 |
-| 变更 | `ui/src/lib/types.ts` | Message 增加 timestamp |
-| 变更 | `ui/src/components/MessageBubble.vue` | Copy 按钮 + 时间戳 + markdown 渲染 |
-| 变更 | `ui/src/components/MessageList.vue` | 传递 timestamp |
-| 变更 | `ui/src/components/ChatContainer.vue` | 创建消息时添加 timestamp |
-| 变更 | `ui/src/App.vue` | 创建消息时添加 timestamp |
-| 变更 | `ui_lite/index.html` | 同功能同步 |
+| 创建 | `features/init-chat/ui/src/lib/markdown.ts` | Markdown 解析器（零依赖） |
+| 创建 | `features/init-chat/ui/src/lib/markdown.test.ts` | 解析器单元测试 |
+| 变更 | `features/init-chat/ui/src/lib/types.ts` | Message 增加 timestamp |
+| 变更 | `features/init-chat/ui/src/components/MessageBubble.vue` | Copy 按钮 + 时间戳 + markdown 渲染 |
+| 变更 | `features/init-chat/ui/src/components/MessageList.vue` | 传递 timestamp |
+| 变更 | `features/init-chat/ui/src/components/ChatContainer.vue` | 创建消息时添加 timestamp |
+| 变更 | `features/init-chat/ui/src/App.vue` | 创建消息时添加 timestamp |
+| 变更 | `features/init-chat/ui_lite/index.html` | 同功能同步 |
 
 ## 风险
 

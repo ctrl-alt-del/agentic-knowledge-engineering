@@ -12,11 +12,12 @@ export default defineConfig({
       name: 'ake-config',
       configureServer(server) {
         const root = path.resolve(import.meta.dirname, '..')
+        const projectRoot = path.resolve(import.meta.dirname, '..', '..')
 
         server.middlewares.use((req, res, next) => {
           if (req.url === '/ake.json') {
             try {
-              const content = fs.readFileSync(path.join(root, 'ake.json'), 'utf-8')
+              const content = fs.readFileSync(path.join(projectRoot, 'ake.json'), 'utf-8')
               res.setHeader('Content-Type', 'application/json')
               res.end(content)
             } catch {
