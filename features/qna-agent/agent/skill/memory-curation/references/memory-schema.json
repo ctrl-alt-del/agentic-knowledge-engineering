@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Memory Entry",
+  "type": "object",
+  "required": ["id", "type", "tags", "content", "sources", "confidence", "created"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^mem-\\d{4}-\\d{2}-\\d{2}-\\d{3}$",
+      "description": "Unique identifier: mem-YYYY-MM-DD-NNN"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["learning", "pattern", "gotcha", "connection"],
+      "description": "learning=新知识, pattern=可复用模式, gotcha=避雷教训, connection=知识关联"
+    },
+    "tags": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^#[a-z_-]+$"},
+      "description": "分类标签，如 #deploy, #api, #error"
+    },
+    "content": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 2000,
+      "description": "记忆内容，一两句话概括"
+    },
+    "sources": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "来源引用：知识源文件 + 会话标识"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "high=已验证, medium=对话中发现, low=推测性"
+    },
+    "created": {"type": "string", "format": "date-time"},
+    "updated": {"type": "string", "format": "date-time"},
+    "access_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 1
+    },
+    "stale": {
+      "type": "boolean",
+      "default": false
+    },
+    "superseded_by": {
+      "type": ["string", "null"],
+      "description": "取代此条目的新条目ID"
+    },
+    "ttl": {
+      "type": ["integer", "null"],
+      "description": "有效期（天），null 表示永不过期"
+    }
+  }
+}

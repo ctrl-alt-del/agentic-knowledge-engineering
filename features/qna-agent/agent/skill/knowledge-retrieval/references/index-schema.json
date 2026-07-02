@@ -1,0 +1,77 @@
+# Index Schema
+
+The knowledge index is a pre-built inverted index mapping tokens to source-section pairs.
+
+## Structure
+
+```json
+{
+  "version": 1,
+  "built": "2026-07-02T12:00:00Z",
+  "sources": {
+    "forward/deploy.md": {
+      "title": "Deployment Guide",
+      "type": "forward",
+      "bytes": 4500,
+      "sections": {
+        "## Prerequisites": {
+          "preview": "你需要安装 Python 3.9+ 和 Docker。",
+          "token_count": 42
+        },
+        "## Steps": {
+          "preview": "1. 构建 Docker 镜像\n2. 推送到镜像仓库...",
+          "token_count": 156
+        }
+      }
+    }
+  },
+  "inverted": {
+    "deploy": [
+      {"source": "forward/deploy.md", "section": "## Steps", "tf": 0.042},
+      {"source": "capsule/errors.md", "section": "## Connection Refused", "tf": 0.018}
+    ],
+    "docker": [
+      {"source": "forward/deploy.md", "section": "## Prerequisites", "tf": 0.071}
+    ]
+  },
+  "source_mtimes": {
+    "forward/deploy.md": 1719900000.0
+  }
+}
+```
+
+## Browser Search Algorithm
+
+```
+search(query, index, max_chunks=5):
+    tokens = tokenize(query)
+    scores = {}  # source#section -> cumulative score
+    
+    for token in tokens:
+        if token in index.inverted:
+            for entry in index.inverted[token]:
+                key = f"{entry.source}#{entry.section}"
+                scores[key] = scores.get(key, 0) + entry.tf
+    
+    ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    return ranked[:max_chunks]
+```
+
+## Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | int | Schema version |
+| `built` | ISO8601 | Index build timestamp |
+| `sources` | object | File metadata keyed by relative path |
+| `sources[key].title` | string | Document title (from # header) |
+| `sources[key].type` | string | Knowledge type: forward/reverse/capsule |
+| `sources[key].bytes` | int | File size in bytes |
+| `sources[key].sections` | object | Sections keyed by ## header name |
+| `sources[key].sections[].preview` | string | First 200 chars of section content |
+| `sources[key].sections[].token_count` | int | Number of tokens in section |
+| `inverted` | object | Token → [{source, section, tf}] |
+| `inverted[token][].source` | string | Relative file path |
+| `inverted[token][].section` | string | Section header |
+| `inverted[token][].tf` | float | Term frequency in section |
+| `source_mtimes` | object | File modification timestamps for change detection |
