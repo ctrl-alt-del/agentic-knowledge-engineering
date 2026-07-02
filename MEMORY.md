@@ -14,6 +14,10 @@
 - **#llm**: Vite browser environment has no `process.env`. Use `import.meta.env` for environment variables instead.
 - **#vue**: `shallowRef` + wrapper pattern — when `provide/inject` dependencies need runtime replacement, wrap the actual implementation in a `shallowRef` and provide a proxy object that delegates to `.value`. The proxy's method calls always resolve to the current value.
 - **#ui**: TypeScript ESM module scope — function declarations are NOT reliably hoisted when transpiled via `tsx` or similar tools. Define helper functions BEFORE the functions that call them, even if they would be hoisted in standard JavaScript.
+- **#portability**: Keep agent core (`agent/`) separate from UI and server. `agent/` contains skills + knowledge + memory — platform-agnostic. `ui_lite/` and `serve.py` are one of many possible UI/server layers.
+- **#index**: Pre-built inverted index (build-index.py) is faster than runtime search for knowledge bases. Browser loads index JSON → in-memory search → fetch relevant files lazily. Index stores metadata + previews only (not full content).
+- **#memory**: Memory distillation should be transparent to users — trigger on idle (30s) or manual button. Distilled entries should have clear `sources` (knowledge file + session ID) for traceability.
+- **#security**: Python's `http.server` binds 0.0.0.0 by default. Always bind to 127.0.0.1 in local dev servers. Block `/config/` directory from direct HTTP access.
 
 ## Patterns That Worked
 <!-- Reusable patterns discovered across features -->
@@ -29,6 +33,9 @@
 - **`shallowRef` for injectable services**: When a service needs dynamic replacement after setup, hold the actual implementation in a `shallowRef` and provide a stable proxy object. Components inject once, always get the current implementation.
 - **Zero-dependency markdown parser**: Four-stage pipeline: HTML-escape → code block isolation → paragraph/list block parsing → inline markdown replacement. Covers 90%+ of chat content with zero npm dependencies. Usable in both TypeScript modules and inline `<script>`.
 - **Copy-to-clipboard UX**: `navigator.clipboard.writeText()` + brief visual feedback ("Copied!" for 1.5s). Graceful fallback if clipboard API unavailable. Works in all modern browsers in secure contexts.
+- **Pre-built inverted index for local search**: `build-index.py` walks knowledge directory, parses markdown sections, tokenizes, builds JSON index. Browser fetches index at startup, searches in-memory with <50ms latency. Index stores only metadata + 200-char previews — full content fetched lazily.
+- **agent/ portability pattern**: `agent/` = skills + knowledge + memory (platform-agnostic). `ui_lite/` = optional browser UI. `serve.py` = optional local server. Clean separation enables deployment to AgentScope, custom platforms, etc. without carrying UI code.
+- **Anti-fabrication via context constraint**: Inject knowledge chunks as `[Knowledge: source#section]` system messages. Skill instructions enforce "only answer from [Knowledge] blocks, cite sources, confidence score." Multiple layers prevent fabrication.
 
 ## Architecture Decisions
 <!-- ADRs made during spec-driven development -->
@@ -39,6 +46,12 @@
 - ADR-005: MCP/API configurations for skills use placeholders in `references/config.md`. No hardcoded endpoints. Deployers replace placeholders with real values.
 - ADR-006: Project-level LLM configuration in `ake.json` (gitignored), with `ake.example.json` as committed template. Uses provider factory pattern to create the right `LlmProvider` at runtime without code changes.
 - ADR-007: Zero-SDK-dependency API integration. Both OpenAI and Anthropic APIs are accessed via plain `fetch()`, avoiding npm packages like `@anthropic-ai/sdk` and `openai`. SSE stream parsing is handled manually per protocol.
+- ADR-008: `agent/` is platform-agnostic core. `ui_lite/`, `serve.py`, `config/` are local-dev only. Each feature's `agent/` can be deployed independently.
+- ADR-009: Pre-built inverted index (build-index.py) over runtime search. Browser loads index JSON, searches in-memory, fetches relevant knowledge files lazily.
+- ADR-010: Knowledge sources are read-only. All learning from conversations goes into MEMORY, which evolves separately from the sources.
+- ADR-011: Multi-skill architecture with orchestrator pattern. Sub-skills are loaded as system messages; the LLM switches modes implicitly based on conversation state.
+- ADR-012: localStorage for session memory, persistent.json for durable memory. Fast, zero-dependency, exportable.
+- ADR-013: Chinese for skills/UI labels, English for code/schemas/JSON keys. Follows project convention from 002-project-initializer-skill.
 
 ## Code Ownership Map
 
@@ -72,6 +85,12 @@
 | `features/init-chat/ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy | Zero-dependency demo: pure HTML/CSS/JS chat UI |
 | `features/init-chat/ui/src/lib/markdown.ts` | 004-chat-markdown-copy | Zero-dependency markdown parser |
 | `features/init-chat/ui/src/components/MessageBubble.vue` | 001-chat-ui, 004-chat-markdown-copy | Single message rendering (updated: markdown, copy, timestamp) |
+| `features/qna-agent/build-index.py` | 005-qna-agent | Inverted index builder (Python stdlib) |
+| `features/qna-agent/serve.py` | 005-qna-agent | Zero-dependency HTTP server |
+| `features/qna-agent/ui_lite/index.html` | 005-qna-agent | Browser Q&A UI with sidebar + search |
+| `features/qna-agent/agent/skill/*/SKILL.md` | 005-qna-agent | Multi-skill architecture (orchestrator, retrieval, curation) |
+| `features/qna-agent/agent/memory/persistent.json` | 005-qna-agent | Self-evolving agent memory |
+| `features/qna-agent/agent/knowledge-sources.json` | 005-qna-agent | Portable knowledge source config |
 
 ## Common Bugs Fixed
 
