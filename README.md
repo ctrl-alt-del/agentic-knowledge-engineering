@@ -7,18 +7,25 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 
 ## Getting Started
 
+### Option A: Q&A Agent (no npm needed)
 ```bash
-# 1. Configure LLM API
-cp ake.example.json ake.json
-# Edit ake.json with your API credentials (provider, apiKey, baseURL, model)
+cd features/qna-agent/
+cp config/ake.example.json config/ake.json    # edit with LLM credentials
+python3 build-index.py                         # initial knowledge index
+python3 serve.py                               # http://127.0.0.1:3100/ui_lite/
+# See features/qna-agent/ARCHITECTURE.md for deployment to other platforms
+```
 
-# 2. Option A: Vue dev server (requires npm)
+### Option B: Chat UI (Vue 3, requires npm)
+```bash
 cd features/init-chat/ui
 npm install
 npm run dev    # start dev server
 npm test       # run tests
+```
 
-# 2. Option B: Zero-dependency demo (no npm needed)
+### Option C: Zero-dependency Chat Demo (no npm needed)
+```bash
 python3 -m http.server 8000
 # Open http://localhost:8000/features/init-chat/ui_lite/
 ```
@@ -71,8 +78,11 @@ Copy the template and fill in your LLM API details:
 ```
 
 - `provider`: `"openai-compatible"` or `"anthropic"`
-- `skills.autoload`: skills loaded into context on startup
+- `skills.paths`: one or more skill directories. For qna-agent use `"features/qna-agent/agent/skill/"`
+- `skills.autoload`: skill names loaded into context on startup. qna-agent uses `["qna-orchestrator", "knowledge-retrieval", "memory-curation"]`
 - `ake.json` is gitignored — never commit your API keys
+
+Each feature has its own `config/ake.example.json` template. See `features/qna-agent/ARCHITECTURE.md` for the full deployment guide.
 
 ## Workflow
 
