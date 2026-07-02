@@ -1,0 +1,18 @@
+{
+  "$schema": "../../ake.schema.json",
+  "llm": {
+    "provider": "<PLACEHOLDER>",
+    "apiKey": "<PLACEHOLDER>",
+    "baseURL": "<PLACEHOLDER>",
+    "model": "<PLACEHOLDER>",
+    "options": {
+      "temperature": 0.7,
+      "maxTokens": 4096,
+      "stream": true
+    }
+  },
+  "skills": {
+    "paths": ["agent/skill/"],
+    "autoload": ["qna-orchestrator", "knowledge-retrieval", "memory-curation"]
+  }
+}
