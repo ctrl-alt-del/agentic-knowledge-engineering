@@ -8,7 +8,7 @@ Open-code skill and UI project for building and orchestrating Claude skills.
 
 ## Project Conventions
 
-- Multi-feature structure: each feature lives under `features/<feature>/` with its own `ui/`, `ui_lite/`, `skill/`, and `specs/` subdirectories
+- Multi-feature structure: each feature lives under `features/<feature>/` with its own `agent/` (skills + knowledge + memory, portable), optional `ui_lite/` (browser UI), and optional `serve.py` (local dev server). `ui/` for full Vue apps.
 - Spec-driven development: all features start with specs before any code
 - One task = one commit with passing build + tests
 - Skills live in `features/<feature>/skill/`; each skill follows the Skill Creator workflow (draft → eval → iterate)

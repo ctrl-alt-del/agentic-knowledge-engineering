@@ -29,11 +29,16 @@ python3 -m http.server 8000
 ├── ake.example.json   # LLM API config template (copy to ake.json)
 ├── ake.schema.json    # Config JSON Schema
 ├── features/          # feature modules (each with ui, skill, specs)
-│   └── init-chat/     # chatbot for project initialization
-│       ├── ui/        #   Vue 3 frontend (requires npm)
-│       ├── ui_lite/   #   Zero-dependency demo
-│       ├── skill/     #   project-initializer skill
-│       └── specs/     #   feature specifications (001-004)
+│   ├── init-chat/     # chatbot for project initialization
+│   │   ├── ui/        #   Vue 3 frontend (requires npm)
+│   │   ├── ui_lite/   #   Zero-dependency demo
+│   │   ├── skill/     #   project-initializer skill
+│   │   └── specs/     #   feature specifications (001-004)
+│   └── qna-agent/     # offline knowledge Q&A agent
+│       ├── agent/     #   portable agent core (skills + knowledge + memory)
+│       ├── ui_lite/   #   zero-dependency browser UI
+│       ├── serve.py   #   local dev server
+│       └── ARCHITECTURE.md  # design doc + deployment guide
 ├── specs/             # SDD workflow + template
 │   ├── SDD.md
 │   └── _template/
