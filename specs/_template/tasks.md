@@ -8,11 +8,11 @@
 ## Block 1: [Category]
 
 - [ ] **Task 1.1**: [Description] — `file paths`
-  - Build: `npm run dev`
-  - Tests: `npm test`
+  - Build: `[build command]`
+  - Tests: `[test command]`
 
 - [ ] **Task 1.2**: [Description] — `file paths`
-  - Build: `npm run dev`
-  - Tests: `npm test`
+  - Build: `[build command]`
+  - Tests: `[test command]`
 
 ## Block 2: [Category]

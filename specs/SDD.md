@@ -78,5 +78,5 @@ Feature Request Received
 
 ## Build & Test Commands
 
-- Build: `npm run dev`
-- Test: `npm test`
+- Build: `python3 features/<feature>/serve.py` (zero-dependency dev server)
+- Test: manual browser verification or feature-specific test scripts

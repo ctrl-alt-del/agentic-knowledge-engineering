@@ -2,12 +2,12 @@
 
 Open-code skill and UI project for building and orchestrating Claude skills.
 
-- **UI**: Vue 3 + TypeScript + Tailwind CSS (Vite)
-- **Testing**: Vitest + @vue/test-utils
+- **UI**: Zero-dependency HTML/JS served via Python stdlib
+- **Server**: Python stdlib HTTP server (no npm, no pip)
 
 ## Getting Started
 
-### Option A: Q&A Agent (no npm needed)
+### Option A: Q&A Agent
 ```bash
 cd features/qna-agent/
 cp config/ake.example.json config/ake.json    # edit with LLM credentials
@@ -16,18 +16,11 @@ python3 serve.py                               # http://127.0.0.1:3100/ui_lite/
 # See features/qna-agent/ARCHITECTURE.md for deployment to other platforms
 ```
 
-### Option B: Chat UI (Vue 3, requires npm)
-```bash
-cd features/init-chat/ui
-npm install
-npm run dev    # start dev server
-npm test       # run tests
-```
+### Option B: Chat UI
 
-### Option C: Zero-dependency Chat Demo (no npm needed)
 ```bash
-python3 -m http.server 8000
-# Open http://localhost:8000/features/init-chat/ui_lite/
+cp ake.example.json ake.json                  # edit with LLM credentials (in project root)
+python3 features/init-chat/serve.py            # http://127.0.0.1:3000/ui_lite/
 ```
 
 ## Project Structure
@@ -35,10 +28,10 @@ python3 -m http.server 8000
 ```
 ├── ake.example.json   # LLM API config template (copy to ake.json)
 ├── ake.schema.json    # Config JSON Schema
-├── features/          # feature modules (each with ui, skill, specs)
+├── features/          # feature modules (each with ui_lite, skill, specs)
 │   ├── init-chat/     # chatbot for project initialization
-│   │   ├── ui/        #   Vue 3 frontend (requires npm)
-│   │   ├── ui_lite/   #   Zero-dependency demo
+│   │   ├── serve.py   #   zero-dependency dev server
+│   │   ├── ui_lite/   #   zero-dependency chat UI
 │   │   ├── skill/     #   project-initializer skill
 │   │   └── specs/     #   feature specifications (001-004)
 │   └── qna-agent/     # offline knowledge Q&A agent

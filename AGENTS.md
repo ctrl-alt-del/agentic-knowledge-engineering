@@ -2,8 +2,8 @@
 
 Open-code skill and UI project for building and orchestrating Claude skills.
 
-- **UI**: Vue 3 + TypeScript + Tailwind CSS (Vite)
-- **Testing**: Vitest + @vue/test-utils
+- **UI**: Zero-dependency HTML/JS served via Python stdlib HTTP server
+- **Testing**: Browser-based manual verification
 - **Skills**: Open-code skills per feature in `features/<feature>/skill/` or `features/<feature>/agent/skill/` directory, loaded by LLM via `LlmProvider`
 
 ## Project Conventions
