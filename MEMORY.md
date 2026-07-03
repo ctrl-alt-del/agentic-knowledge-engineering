@@ -11,6 +11,9 @@
 - **#index**: Pre-built inverted index (build-index.py) is faster than runtime search for knowledge bases. Browser loads index JSON → in-memory search → fetch relevant files lazily. Index stores metadata + previews only (not full content).
 - **#memory**: Memory distillation should be transparent to users — trigger on idle (30s) or manual button. Distilled entries should have clear `sources` (knowledge file + session ID) for traceability.
 - **#security**: Python's `http.server` binds 0.0.0.0 by default. Always bind to 127.0.0.1 in local dev servers. Block `/config/` directory from direct HTTP access.
+- **#security ⚡**: Never serve the raw API key to the browser. `serve.py` proxies LLM calls server-side and redacts `llm.apiKey` in the served `/ake.json` to a sentinel (`"configured"`) — the real key is read from disk only inside `do_POST`. Redact to a non-placeholder sentinel, not empty/removed, or the UI's connected-check drops to Mock. Never log the key/body/headers.
+- **#build**: Browser `fetch()` → LLM API hits CORS. Fix for local dev: proxy through the stdlib server. Override `end_headers()` to inject `Access-Control-Allow-Origin: *` on ALL responses (not per-handler), and add a `do_POST` that forwards to `{baseURL}{path}` via `urllib.request`. Client picks proxy (absolute path) vs direct (`baseURL`) by hostname check (`localhost`/`127.0.0.1`). Resolves the CORS risk logged in 003-llm-api-config.
+- **#build**: stdlib SSE streaming passthrough — `urllib.request.urlopen()` then loop `read(1024)` → `wfile.write()` + `wfile.flush()`. `urllib.error.HTTPError` is itself readable, so forward upstream error status + `.read()` body verbatim.
 
 ## Patterns That Worked
 <!-- Reusable patterns discovered across features -->
@@ -52,8 +55,8 @@
 | `features/init-chat/skill/project-initializer/assets/state-schema.json` | 002-project-initializer-skill | Resume state schema |
 | `features/init-chat/skill/project-initializer/evals/evals.json` | 002-project-initializer-skill | Test cases + assertions |
 | `features/init-chat/skill/project-initializer/evals/grade.py` | 002-project-initializer-skill | Auto-grading script |
-| `features/init-chat/ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy | Zero-dependency demo: pure HTML/CSS/JS chat UI |
-| `features/init-chat/serve.py` | 003-llm-api-config, migration | Zero-dependency dev server, serves ake.json from project root |
+| `features/init-chat/ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy, 006-serve-llm-proxy | Zero-dependency demo: pure HTML/CSS/JS chat UI; `proxyUrl()` picks proxy vs direct |
+| `features/init-chat/serve.py` | 003-llm-api-config, 006-serve-llm-proxy, migration | Zero-dependency dev server; serves ake.json (key redacted), proxies LLM calls, CORS |
 | `features/qna-agent/build-index.py` | 005-qna-agent | Inverted index builder (Python stdlib) |
 | `features/qna-agent/serve.py` | 005-qna-agent | Zero-dependency HTTP server |
 | `features/qna-agent/ui_lite/index.html` | 005-qna-agent | Browser Q&A UI with sidebar + search |

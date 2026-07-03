@@ -1,5 +1,5 @@
 ---
-last_updated: "2026-07-02"
+last_updated: "2026-07-03"
 ---
 
 # Feature Index
@@ -11,5 +11,6 @@ last_updated: "2026-07-02"
 | 003 | LLM API 配置 | `features/init-chat/specs/003-llm-api-config/` | Done | `ake.example.json`, `features/init-chat/serve.py` |
 | 004 | Chat Markdown + Copy | `features/init-chat/specs/004-chat-markdown-copy/` | Done | `features/init-chat/ui_lite/index.html` |
 | 005 | Q&A Knowledge Agent | `features/qna-agent/specs/005-qna-agent/` | ✅ Done | `features/qna-agent/**` |
+| 006 | Serve LLM Proxy | `features/init-chat/specs/006-serve-llm-proxy/` | ✅ Done | `features/init-chat/serve.py`, `features/init-chat/ui_lite/index.html` |
 
 Status: 📋 Planned → 🚧 In Progress → ✅ Done → 📦 Archived

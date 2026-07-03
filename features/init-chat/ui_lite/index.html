@@ -399,8 +399,14 @@ async function streamResponse() {
   }
 }
 
+function proxyUrl(cfg, apiPath) {
+  const host = location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1') return apiPath;
+  return cfg.baseURL.replace(/\/$/, '') + apiPath;
+}
+
 async function streamOpenAI(cfg, messages, idx) {
-  const res = await fetch(`${cfg.baseURL.replace(/\/$/,'')}/chat/completions`, {
+  const res = await fetch(proxyUrl(cfg, '/chat/completions'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${cfg.apiKey}` },
     body: JSON.stringify({
@@ -422,7 +428,7 @@ async function streamAnthropic(cfg, messages, idx) {
   if (systemMsgs) body.system = systemMsgs;
   if (cfg.options?.temperature != null) body.temperature = cfg.options.temperature;
 
-  const res = await fetch(`${cfg.baseURL.replace(/\/$/,'')}/messages`, {
+  const res = await fetch(proxyUrl(cfg, '/messages'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': cfg.apiKey, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify(body),
