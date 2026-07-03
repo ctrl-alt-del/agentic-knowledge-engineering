@@ -12,11 +12,19 @@ import http.server
 import json
 import os
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 3100
+
+PLACEHOLDERS = {"<PLACEHOLDER>", ""}
+
+PROXY_ENDPOINTS = ("/chat/completions", "/messages")
+
+AKE_JSON_PATH = "config/ake.json"
 
 CONTENT_TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -39,7 +47,7 @@ class QnaHandler(http.server.SimpleHTTPRequestHandler):
         path = self.path.split("?")[0]
 
         if path == "/ake.json":
-            return self._serve_file("config/ake.json")
+            return self._serve_ake_json()
         if path.startswith("/config/"):
             self.send_error(403, "Forbidden")
             return
@@ -70,31 +78,24 @@ class QnaHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(405, "Method Not Allowed")
 
+    def do_POST(self):
+        path = self.path.split("?")[0]
+        if path in PROXY_ENDPOINTS:
+            return self._proxy_llm(path)
+        self.send_error(404, "Not Found")
+
+    def end_headers(self):
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            "Content-Type, Authorization, x-api-key, anthropic-version",
+        )
+        super().end_headers()
+
     def do_OPTIONS(self):
         self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, PUT, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
         self.end_headers()
-
-    def _serve_file(self, rel_path):
-        filepath = SCRIPT_DIR / rel_path
-        if not filepath.exists():
-            self.send_error(404, "Not Found")
-            return
-        ext = filepath.suffix.lower()
-        content_type = CONTENT_TYPES.get(ext, "application/octet-stream")
-
-        try:
-            with open(filepath, "rb") as f:
-                data = f.read()
-            self.send_response(200)
-            self.send_header("Content-Type", content_type)
-            self.send_header("Content-Length", len(data))
-            self.end_headers()
-            self.wfile.write(data)
-        except Exception as e:
-            self.send_error(500, str(e))
 
     def _send_json(self, data):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -103,6 +104,101 @@ class QnaHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Content-Length", len(body))
         self.end_headers()
         self.wfile.write(body)
+
+    def _serve_ake_json(self):
+        filepath = SCRIPT_DIR / AKE_JSON_PATH
+        if not filepath.exists():
+            self.send_error(404, "Not Found")
+            return
+        try:
+            with open(filepath, "rb") as f:
+                data = self._redact_api_key(f.read())
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", len(data))
+            self.end_headers()
+            self.wfile.write(data)
+        except Exception as e:
+            self.send_error(500, str(e))
+
+    @staticmethod
+    def _redact_api_key(raw):
+        """Replace a real llm.apiKey with a sentinel so it never reaches the
+        browser. Placeholder/empty keys are left untouched so the UI falls back
+        to Mock."""
+        try:
+            cfg = json.loads(raw)
+        except Exception:
+            return raw
+        llm = cfg.get("llm")
+        if isinstance(llm, dict) and llm.get("apiKey") not in PLACEHOLDERS:
+            llm["apiKey"] = "configured"
+            return json.dumps(cfg, ensure_ascii=False).encode("utf-8")
+        return raw
+
+    def _proxy_llm(self, path):
+        base_url, api_key = self._load_llm_credentials()
+        if not base_url or not api_key:
+            self.send_error(502, "LLM API not configured in ake.json")
+            return
+
+        length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(length) if length else b""
+
+        target = base_url.rstrip("/") + path
+        headers = {"Content-Type": "application/json"}
+        if path == "/messages":
+            headers["x-api-key"] = api_key
+            headers["anthropic-version"] = "2023-06-01"
+        else:
+            headers["Authorization"] = f"Bearer {api_key}"
+
+        req = urllib.request.Request(target, data=body, headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(req) as upstream:
+                self.send_response(upstream.status)
+                self.send_header(
+                    "Content-Type",
+                    upstream.headers.get("Content-Type", "text/event-stream"),
+                )
+                self.end_headers()
+                self._stream(upstream)
+        except urllib.error.HTTPError as e:
+            err_body = e.read()
+            self.send_response(e.code)
+            self.send_header(
+                "Content-Type", e.headers.get("Content-Type", "application/json")
+            )
+            self.send_header("Content-Length", len(err_body))
+            self.end_headers()
+            self.wfile.write(err_body)
+        except urllib.error.URLError as e:
+            self.send_error(502, f"Upstream unreachable: {e.reason}")
+
+    def _stream(self, upstream):
+        while True:
+            chunk = upstream.read(1024)
+            if not chunk:
+                break
+            self.wfile.write(chunk)
+            self.wfile.flush()
+
+    @staticmethod
+    def _load_llm_credentials():
+        filepath = SCRIPT_DIR / AKE_JSON_PATH
+        if not filepath.exists():
+            return None, None
+        try:
+            with open(filepath, "rb") as f:
+                cfg = json.loads(f.read())
+        except Exception:
+            return None, None
+        llm = cfg.get("llm", {})
+        base_url = llm.get("baseURL")
+        api_key = llm.get("apiKey")
+        if base_url in PLACEHOLDERS or api_key in PLACEHOLDERS:
+            return None, None
+        return base_url, api_key
 
     def log_message(self, format, *args):
         sys.stderr.write("[%s] %s\n" % (self.log_date_time_string(), format % args))

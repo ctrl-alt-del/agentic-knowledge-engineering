@@ -12,5 +12,6 @@ last_updated: "2026-07-03"
 | 004 | Chat Markdown + Copy | `features/init-chat/specs/004-chat-markdown-copy/` | Done | `features/init-chat/ui_lite/index.html` |
 | 005 | Q&A Knowledge Agent | `features/qna-agent/specs/005-qna-agent/` | ✅ Done | `features/qna-agent/**` |
 | 006 | Serve LLM Proxy | `features/init-chat/specs/006-serve-llm-proxy/` | ✅ Done | `features/init-chat/serve.py`, `features/init-chat/ui_lite/index.html` |
+| 007 | Q&A Serve LLM Proxy | `features/qna-agent/specs/007-qna-serve-llm-proxy/` | ✅ Done | `features/qna-agent/serve.py`, `features/qna-agent/ui_lite/index.html` |
 
 Status: 📋 Planned → 🚧 In Progress → ✅ Done → 📦 Archived

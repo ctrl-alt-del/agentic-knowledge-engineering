@@ -58,8 +58,8 @@
 | `features/init-chat/ui_lite/index.html` | 001-chat-ui, 003-llm-api-config, 004-chat-markdown-copy, 006-serve-llm-proxy | Zero-dependency demo: pure HTML/CSS/JS chat UI; `proxyUrl()` picks proxy vs direct |
 | `features/init-chat/serve.py` | 003-llm-api-config, 006-serve-llm-proxy, migration | Zero-dependency dev server; serves ake.json (key redacted), proxies LLM calls, CORS |
 | `features/qna-agent/build-index.py` | 005-qna-agent | Inverted index builder (Python stdlib) |
-| `features/qna-agent/serve.py` | 005-qna-agent | Zero-dependency HTTP server |
-| `features/qna-agent/ui_lite/index.html` | 005-qna-agent | Browser Q&A UI with sidebar + search |
+| `features/qna-agent/serve.py` | 005-qna-agent, 007-qna-serve-llm-proxy | Zero-dependency HTTP server; proxies LLM calls, CORS, redacts key |
+| `features/qna-agent/ui_lite/index.html` | 005-qna-agent, 007-qna-serve-llm-proxy | Browser Q&A UI with sidebar + search; `proxyUrl()` picks proxy vs direct |
 | `features/qna-agent/agent/skill/*/SKILL.md` | 005-qna-agent | Multi-skill architecture (orchestrator, retrieval, curation) |
 | `features/qna-agent/agent/memory/persistent.json` | 005-qna-agent | Self-evolving agent memory |
 | `features/qna-agent/agent/knowledge-sources.json` | 005-qna-agent | Portable knowledge source config |
