@@ -24,4 +24,10 @@ api:
     endpoint: "<API>/validate-repo"
     method: GET
     description: "检查 GitHub 仓库 URL 是否有效且可克隆"
+
+  # 推送项目到远程服务器（阶段 7b 使用）
+  remote_project:
+    endpoint: "<REMOTE_SERVER>/api/projects"
+    method: POST
+    description: "推送最终项目配置到远程服务器。替换 <REMOTE_SERVER> 为实际地址。"
 ```
