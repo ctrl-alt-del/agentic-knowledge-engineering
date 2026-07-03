@@ -45,3 +45,8 @@ ake.json
 Thumbs.db
 desktop.ini
 *~
+
+# Self-evolving memory — raw observations may contain residual PII
+memory/raw/
+memory/.backup/
+memory/.decay-results.json

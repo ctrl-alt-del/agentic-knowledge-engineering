@@ -1,0 +1,622 @@
+{
+  "version": "1.0.0",
+  "nodes": [
+    {
+      "id": "g-001",
+      "title": "Skills that output structured JSON must include a JSON Schema",
+      "type": "gotcha",
+      "confidence": 0.9,
+      "tags": [
+        "skills",
+        "output"
+      ],
+      "community": 1
+    },
+    {
+      "id": "g-002",
+      "title": "Implicit requirements must be explicit in skill instructions",
+      "type": "gotcha",
+      "confidence": 0.9,
+      "tags": [
+        "skills",
+        "prompting"
+      ],
+      "community": 1
+    },
+    {
+      "id": "g-003",
+      "title": "Anthropic API system field goes at request body top level, not inside messages[]",
+      "type": "gotcha",
+      "confidence": 1.0,
+      "tags": [
+        "llm",
+        "api",
+        "anthropic"
+      ],
+      "community": 2
+    },
+    {
+      "id": "g-004",
+      "title": "Keep agent core separate from UI and server",
+      "type": "gotcha",
+      "confidence": 1.0,
+      "tags": [
+        "portability",
+        "architecture"
+      ],
+      "community": 4
+    },
+    {
+      "id": "g-005",
+      "title": "Pre-built inverted index is faster than runtime search for knowledge bases",
+      "type": "gotcha",
+      "confidence": 0.85,
+      "tags": [
+        "index",
+        "search",
+        "perf"
+      ],
+      "community": 5
+    },
+    {
+      "id": "g-006",
+      "title": "Memory distillation should be transparent to users",
+      "type": "gotcha",
+      "confidence": 0.85,
+      "tags": [
+        "memory",
+        "ux"
+      ],
+      "community": 5
+    },
+    {
+      "id": "g-007",
+      "title": "Python http.server binds 0.0.0.0 by default \u2014 always bind to 127.0.0.1",
+      "type": "gotcha",
+      "confidence": 1.0,
+      "tags": [
+        "security",
+        "server",
+        "python"
+      ],
+      "community": 3
+    },
+    {
+      "id": "g-008",
+      "title": "\u26a1 Never serve the raw API key to the browser",
+      "type": "gotcha",
+      "confidence": 1.0,
+      "tags": [
+        "security",
+        "api",
+        "server"
+      ],
+      "community": 3
+    },
+    {
+      "id": "g-009",
+      "title": "Browser fetch() to LLM API hits CORS \u2014 fix with stdlib proxy",
+      "type": "gotcha",
+      "confidence": 1.0,
+      "tags": [
+        "build",
+        "cors",
+        "proxy"
+      ],
+      "community": 3
+    },
+    {
+      "id": "g-010",
+      "title": "stdlib SSE streaming passthrough via urllib + wfile",
+      "type": "gotcha",
+      "confidence": 0.85,
+      "tags": [
+        "build",
+        "sse",
+        "streaming"
+      ],
+      "community": 2
+    },
+    {
+      "id": "p-001",
+      "title": "Skill Creator eval workflow \u2014 parallel subagents + grading + mkviewer",
+      "type": "pattern",
+      "confidence": 0.9,
+      "tags": [
+        "skills",
+        "eval",
+        "testing"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-002",
+      "title": "Schema-first skill output \u2014 provide exact JSON Schema as output contract",
+      "type": "pattern",
+      "confidence": 0.9,
+      "tags": [
+        "skills",
+        "output",
+        "schema"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-003",
+      "title": "Skill eval grading scripts \u2014 reusable grade.py with jsonschema + assertions",
+      "type": "pattern",
+      "confidence": 0.9,
+      "tags": [
+        "skills",
+        "eval",
+        "testing"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-004",
+      "title": "Config-driven provider pattern \u2014 single JSON config controls LLM backend switching",
+      "type": "pattern",
+      "confidence": 1.0,
+      "tags": [
+        "architecture",
+        "llm",
+        "config"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-005",
+      "title": "SSE stream parsing via fetch().body.getReader() \u2014 no SDK needed",
+      "type": "pattern",
+      "confidence": 0.9,
+      "tags": [
+        "llm",
+        "sse",
+        "streaming"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-006",
+      "title": "Zero-dependency markdown parser \u2014 4-stage pipeline for chat content",
+      "type": "pattern",
+      "confidence": 0.85,
+      "tags": [
+        "ui",
+        "markdown",
+        "parsing"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-007",
+      "title": "Copy-to-clipboard UX \u2014 navigator.clipboard.writeText() + visual feedback",
+      "type": "pattern",
+      "confidence": 0.85,
+      "tags": [
+        "ui",
+        "ux",
+        "clipboard"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-008",
+      "title": "Pre-built inverted index for local search \u2014 build-index.py + lazy fetch",
+      "type": "pattern",
+      "confidence": 1.0,
+      "tags": [
+        "index",
+        "search",
+        "perf"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-009",
+      "title": "agent/ portability pattern \u2014 skills + knowledge + memory, platform-agnostic",
+      "type": "pattern",
+      "confidence": 1.0,
+      "tags": [
+        "portability",
+        "architecture"
+      ],
+      "community": 0
+    },
+    {
+      "id": "p-010",
+      "title": "Anti-fabrication via context constraint \u2014 inject knowledge chunks, enforce citations",
+      "type": "pattern",
+      "confidence": 0.9,
+      "tags": [
+        "skills",
+        "knowledge",
+        "prompting"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-001",
+      "title": "ADR-001: Specs per feature in features/<feature>/specs/",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "architecture"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-002",
+      "title": "ADR-002: Modular LLM backends with config-driven provider switching",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "architecture"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-003",
+      "title": "ADR-004: Skills live in features/<feature>/skill/",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "skills"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-004",
+      "title": "ADR-005: MCP/API configurations for skills use placeholders in references/config.md",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "api"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-005",
+      "title": "ADR-006: Project-level LLM configuration in ake.json at project root (gitignored), with ake.example.json as committed template",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "config"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-006",
+      "title": "ADR-007: Zero-SDK-dependency API integration",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "api"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-007",
+      "title": "ADR-008: agent/ is platform-agnostic core",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "architecture"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-008",
+      "title": "ADR-009: Pre-built inverted index (build-index.py) over runtime search",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "perf"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-009",
+      "title": "ADR-010: Knowledge sources are read-only",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "memory"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-010",
+      "title": "ADR-011: Multi-skill architecture with orchestrator pattern",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "skills"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-011",
+      "title": "ADR-012: localStorage for session memory, persistent.json for durable memory",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "data"
+      ],
+      "community": 0
+    },
+    {
+      "id": "d-012",
+      "title": "ADR-013: Chinese for skills/UI labels, English for code/schemas/JSON keys",
+      "type": "decision",
+      "confidence": 0.9,
+      "tags": [
+        "conventions"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-001",
+      "title": "Code ownership: init-chat skill",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-002",
+      "title": "Code ownership: init-chat skill",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-003",
+      "title": "Code ownership: init-chat UI",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-004",
+      "title": "Code ownership: init-chat server",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-005",
+      "title": "Code ownership: qna build",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-006",
+      "title": "Code ownership: qna server",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-007",
+      "title": "Code ownership: qna UI",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-008",
+      "title": "Code ownership: qna skills",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-009",
+      "title": "Code ownership: qna memory",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-010",
+      "title": "Code ownership: qna config",
+      "type": "fact",
+      "confidence": 0.9,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "community": 0
+    },
+    {
+      "id": "f-011",
+      "title": "AI Workflow Rule \u2014 spec writing prerequisites and post-feature steps",
+      "type": "fact",
+      "confidence": 1.0,
+      "tags": [
+        "workflow",
+        "sdd"
+      ],
+      "community": 0
+    }
+  ],
+  "edges": [
+    {
+      "source": "g-001",
+      "target": "p-002",
+      "relation": "causes"
+    },
+    {
+      "source": "p-002",
+      "target": "p-003",
+      "relation": "depends_on"
+    },
+    {
+      "source": "p-001",
+      "target": "p-003",
+      "relation": "depends_on"
+    },
+    {
+      "source": "g-002",
+      "target": "g-001",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-003",
+      "target": "p-005",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-003",
+      "target": "p-004",
+      "relation": "depends_on"
+    },
+    {
+      "source": "p-005",
+      "target": "g-010",
+      "relation": "relates_to"
+    },
+    {
+      "source": "p-004",
+      "target": "d-002",
+      "relation": "relates_to"
+    },
+    {
+      "source": "p-004",
+      "target": "d-006",
+      "relation": "relates_to"
+    },
+    {
+      "source": "p-004",
+      "target": "d-007",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-008",
+      "target": "g-007",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-008",
+      "target": "g-009",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-007",
+      "target": "g-009",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-004",
+      "target": "p-009",
+      "relation": "causes"
+    },
+    {
+      "source": "p-009",
+      "target": "d-008",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-005",
+      "target": "p-008",
+      "relation": "causes"
+    },
+    {
+      "source": "p-008",
+      "target": "d-009",
+      "relation": "relates_to"
+    },
+    {
+      "source": "g-006",
+      "target": "p-010",
+      "relation": "relates_to"
+    },
+    {
+      "source": "p-010",
+      "target": "d-010",
+      "relation": "relates_to"
+    },
+    {
+      "source": "d-010",
+      "target": "d-012",
+      "relation": "relates_to"
+    },
+    {
+      "source": "d-004",
+      "target": "d-011",
+      "relation": "relates_to"
+    },
+    {
+      "source": "d-011",
+      "target": "g-001",
+      "relation": "depends_on"
+    },
+    {
+      "source": "g-009",
+      "target": "g-010",
+      "relation": "relates_to"
+    },
+    {
+      "source": "f-004",
+      "target": "d-001",
+      "relation": "relates_to"
+    },
+    {
+      "source": "f-006",
+      "target": "d-007",
+      "relation": "relates_to"
+    },
+    {
+      "source": "f-011",
+      "target": "d-010",
+      "relation": "relates_to"
+    }
+  ],
+  "communities": {
+    "1": "Skills and evaluations \u2014 drafting, output schemas, grading, and eval workflows",
+    "2": "LLM API integration \u2014 provider config, SSE streaming, Anthropic vs OpenAI protocol differences",
+    "3": "Security and server hardening \u2014 API key protection, bind addresses, CORS proxying",
+    "4": "Project architecture \u2014 portability, specs-per-feature, orchestrator patterns",
+    "5": "Knowledge management \u2014 memory, search index, anti-fabrication, read-only sources",
+    "6": "Code ownership and conventions \u2014 file touchpoints, Chinese/English conventions, workflow rules",
+    "7": "UI patterns \u2014 markdown parsing, clipboard, user experience"
+  }
+}

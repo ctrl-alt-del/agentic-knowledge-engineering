@@ -1,0 +1,827 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-07-03T07:58:22Z",
+  "updated_at": "2026-07-03T08:02:23Z",
+  "entries": [
+    {
+      "id": "g-001",
+      "type": "gotcha",
+      "title": "Skills that output structured JSON must include a JSON Schema",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills",
+        "output"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-002",
+      "type": "gotcha",
+      "title": "Implicit requirements must be explicit in skill instructions",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills",
+        "prompting"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-003",
+      "type": "gotcha",
+      "title": "Anthropic API system field goes at request body top level, not inside messages[]",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "llm",
+        "api",
+        "anthropic"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-004",
+      "type": "gotcha",
+      "title": "Keep agent core separate from UI and server",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "portability",
+        "architecture"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-005",
+      "type": "gotcha",
+      "title": "Pre-built inverted index is faster than runtime search for knowledge bases",
+      "confidence": 0.85,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "index",
+        "search",
+        "perf"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-006",
+      "type": "gotcha",
+      "title": "Memory distillation should be transparent to users",
+      "confidence": 0.85,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "memory",
+        "ux"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-007",
+      "type": "gotcha",
+      "title": "Python http.server binds 0.0.0.0 by default \u2014 always bind to 127.0.0.1",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "security",
+        "server",
+        "python"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-008",
+      "type": "gotcha",
+      "title": "\u26a1 Never serve the raw API key to the browser",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "security",
+        "api",
+        "server"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": true,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-009",
+      "type": "gotcha",
+      "title": "Browser fetch() to LLM API hits CORS \u2014 fix with stdlib proxy",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "build",
+        "cors",
+        "proxy"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "g-010",
+      "type": "gotcha",
+      "title": "stdlib SSE streaming passthrough via urllib + wfile",
+      "confidence": 0.85,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "build",
+        "sse",
+        "streaming"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-001",
+      "type": "pattern",
+      "title": "Skill Creator eval workflow \u2014 parallel subagents + grading + mkviewer",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills",
+        "eval",
+        "testing"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-002",
+      "type": "pattern",
+      "title": "Schema-first skill output \u2014 provide exact JSON Schema as output contract",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills",
+        "output",
+        "schema"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-003",
+      "type": "pattern",
+      "title": "Skill eval grading scripts \u2014 reusable grade.py with jsonschema + assertions",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills",
+        "eval",
+        "testing"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-004",
+      "type": "pattern",
+      "title": "Config-driven provider pattern \u2014 single JSON config controls LLM backend switching",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "architecture",
+        "llm",
+        "config"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-005",
+      "type": "pattern",
+      "title": "SSE stream parsing via fetch().body.getReader() \u2014 no SDK needed",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "llm",
+        "sse",
+        "streaming"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-006",
+      "type": "pattern",
+      "title": "Zero-dependency markdown parser \u2014 4-stage pipeline for chat content",
+      "confidence": 0.85,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ui",
+        "markdown",
+        "parsing"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-007",
+      "type": "pattern",
+      "title": "Copy-to-clipboard UX \u2014 navigator.clipboard.writeText() + visual feedback",
+      "confidence": 0.85,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ui",
+        "ux",
+        "clipboard"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-008",
+      "type": "pattern",
+      "title": "Pre-built inverted index for local search \u2014 build-index.py + lazy fetch",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "index",
+        "search",
+        "perf"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-009",
+      "type": "pattern",
+      "title": "agent/ portability pattern \u2014 skills + knowledge + memory, platform-agnostic",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "portability",
+        "architecture"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "p-010",
+      "type": "pattern",
+      "title": "Anti-fabrication via context constraint \u2014 inject knowledge chunks, enforce citations",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills",
+        "knowledge",
+        "prompting"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-001",
+      "type": "decision",
+      "title": "ADR-001: Specs per feature in features/<feature>/specs/",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "architecture"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-002",
+      "type": "decision",
+      "title": "ADR-002: Modular LLM backends with config-driven provider switching",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "architecture"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-003",
+      "type": "decision",
+      "title": "ADR-004: Skills live in features/<feature>/skill/",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-004",
+      "type": "decision",
+      "title": "ADR-005: MCP/API configurations for skills use placeholders in references/config.md",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "api"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-005",
+      "type": "decision",
+      "title": "ADR-006: Project-level LLM configuration in ake.json at project root (gitignored), with ake.example.json as committed template",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "config"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-006",
+      "type": "decision",
+      "title": "ADR-007: Zero-SDK-dependency API integration",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "api"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-007",
+      "type": "decision",
+      "title": "ADR-008: agent/ is platform-agnostic core",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "architecture"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-008",
+      "type": "decision",
+      "title": "ADR-009: Pre-built inverted index (build-index.py) over runtime search",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "perf"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-009",
+      "type": "decision",
+      "title": "ADR-010: Knowledge sources are read-only",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "memory"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-010",
+      "type": "decision",
+      "title": "ADR-011: Multi-skill architecture with orchestrator pattern",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "skills"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-011",
+      "type": "decision",
+      "title": "ADR-012: localStorage for session memory, persistent.json for durable memory",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "data"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "d-012",
+      "type": "decision",
+      "title": "ADR-013: Chinese for skills/UI labels, English for code/schemas/JSON keys",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "conventions"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-001",
+      "type": "fact",
+      "title": "Code ownership: init-chat skill",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-002",
+      "type": "fact",
+      "title": "Code ownership: init-chat skill",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-003",
+      "type": "fact",
+      "title": "Code ownership: init-chat UI",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-004",
+      "type": "fact",
+      "title": "Code ownership: init-chat server",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "init-chat"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-005",
+      "type": "fact",
+      "title": "Code ownership: qna build",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-006",
+      "type": "fact",
+      "title": "Code ownership: qna server",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-007",
+      "type": "fact",
+      "title": "Code ownership: qna UI",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-008",
+      "type": "fact",
+      "title": "Code ownership: qna skills",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-009",
+      "type": "fact",
+      "title": "Code ownership: qna memory",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-010",
+      "type": "fact",
+      "title": "Code ownership: qna config",
+      "confidence": 0.9,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "ownership",
+        "qna"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": false,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    },
+    {
+      "id": "f-011",
+      "type": "fact",
+      "title": "AI Workflow Rule \u2014 spec writing prerequisites and post-feature steps",
+      "confidence": 1.0,
+      "created": "2026-07-03T08:02:23Z",
+      "last_accessed": "2026-07-03T08:02:23Z",
+      "access_count": 0,
+      "tags": [
+        "workflow",
+        "sdd"
+      ],
+      "source": "memory-init-2026-07-03",
+      "pinned": true,
+      "deprecated": false,
+      "recurrence_count": 1,
+      "related": [],
+      "superseded_by": null
+    }
+  ]
+}
