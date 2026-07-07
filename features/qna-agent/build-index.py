@@ -109,6 +109,7 @@ def build_index(knowledge_dir, output_path=None, force=False):
 
     sources = {}
     inverted = {}
+    source_mtimes = {}
 
     for filepath, rel_path in files.items():
         rel_str = str(rel_path).replace("\\", "/")
@@ -124,6 +125,7 @@ def build_index(knowledge_dir, output_path=None, force=False):
 
         sections = parse_markdown_sections(content)
         file_bytes = filepath.stat().st_size
+        source_mtimes[rel_str] = filepath.stat().st_mtime
 
         source_entry = {
             "title": title,
@@ -135,8 +137,8 @@ def build_index(knowledge_dir, output_path=None, force=False):
         for section_name, section_content in sections.items():
             tokens = tokenize(section_content)
             token_counts = Counter(tokens)
-            preview = section_content[:200]
-            if len(section_content) > 200:
+            preview = section_content[:500]
+            if len(section_content) > 500:
                 preview += "..."
 
             source_entry["sections"][section_name] = {
@@ -155,6 +157,20 @@ def build_index(knowledge_dir, output_path=None, force=False):
                     "tf": round(tf, 4),
                 })
 
+            heading_text = section_name.lstrip("#").strip()
+            heading_tokens = tokenize(heading_text)
+            if heading_tokens:
+                heading_counts = Counter(heading_tokens)
+                for token, count in heading_counts.items():
+                    tf = (count * 3) / total_tokens
+                    if token not in inverted:
+                        inverted[token] = []
+                    inverted[token].append({
+                        "source": rel_str,
+                        "section": section_name,
+                        "tf": round(tf, 4),
+                    })
+
         sources[rel_str] = source_entry
 
     output = {
@@ -162,6 +178,7 @@ def build_index(knowledge_dir, output_path=None, force=False):
         "built": _now(),
         "sources": sources,
         "inverted": inverted,
+        "source_mtimes": source_mtimes,
     }
 
     _write_index(output_path, output)
